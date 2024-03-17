@@ -1,0 +1,21 @@
+.foodParent{
+    display: flex;
+    justify-content: space-between;
+}
+.resultFlex{
+    display: flex !important;
+    flex-direction: row;
+    justify-content:space-between
+}
+.typeFruitList{
+    text-align: left;
+}
+.typeVegetableList{
+    text-align: left;
+}
+.typeCerealList{
+    text-align: left;
+}
+.typePulseList{
+    text-align: left;
+}
