@@ -6,7 +6,6 @@ export default function Home() {
   const [foodItems, setFoodItems] = useState([]);
   const [totalCarbs, setTotalCarbs] = useState(0);
   const [foodGrams, setFoodGrams] = useState({});
-  const [userName, setUserName] = useState("");
   //   const [totalSugar, setTotalSugar] = useState(0);
   //   const [totalProtein, setTotalProtein] = useState(0);
   //   const [totalCholestrol, setTotalCholestrol] = useState(0);
@@ -368,7 +367,6 @@ export default function Home() {
         <div className={styles.resultFlex}>
           <div>
             <h3>Result</h3>
-            <h1>hello {userName}</h1>
             <strong>Total carbohydrates = {totalCarbs.toFixed(2)}</strong>
             <br />
           </div>

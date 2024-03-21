@@ -16,7 +16,7 @@ export default function Login() {
         if (result.data === "success") {
           // Store the user's email in local storage
           localStorage.setItem("userEmail", email);
-          navigate("/home");
+          navigate("/");
         }
       })
       .catch((err) => console.log(err));
