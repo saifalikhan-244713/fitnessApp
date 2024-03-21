@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import styles from "../styles/HomeStyles.module.css";
-import axios from "axios";
 export default function Home() {
   const [selectedFoods, setSelectedFoods] = useState([]);
   const [foodItems, setFoodItems] = useState([]);
@@ -194,23 +193,7 @@ export default function Home() {
   // useEffect to recalculate total carbs whenever foodItems change
   // we used .reduce bcz it reduces all the elements of the array to a single value by repeatedly applying a function
   // .map function creates a new array by applying a function on each of the element of the arraay
-  useEffect(() => {
-    // Retrieve user's email from local storage
-    const userEmail = localStorage.getItem("userEmail");
-    if (userEmail) {
-      // Fetch user information from the server based on the email
-      axios
-        .get(`http://localhost:3001/user/${userEmail}`)
-        .then((response) => {
-          // Assuming response.data contains user information including name
-          setUserName(response.data.name);
-        })
-        .catch((error) => {
-          console.error("Error fetching user information:", error);
-        });
-    }
-  }, []);
-
+ 
   useEffect(() => {
     console.log("foodItems:", foodItems);
     // console.log("selectedFoods:", selectedFoods);
