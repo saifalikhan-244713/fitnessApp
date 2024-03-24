@@ -1,21 +1,139 @@
-.foodParent{
-    display: flex;
-    justify-content: space-between;
+.foodParent {
+  display: flex;
+  justify-content: space-between;
 }
-.resultFlex{
-    display: flex !important;
-    flex-direction: row;
-    justify-content:space-between
+.resultFlex {
+  display: flex !important;
+  flex-direction: row;
+  justify-content: space-between;
 }
-.typeFruitList{
-    text-align: left;
+.typeFruitList {
+  text-align: left;
 }
-.typeVegetableList{
-    text-align: left;
+.typeVegetableList {
+  text-align: left;
 }
-.typeCerealList{
-    text-align: left;
+.typeCerealList {
+  text-align: left;
 }
-.typePulseList{
-    text-align: left;
+.typePulseList {
+  text-align: left;
 }
+
+.containerFluid {
+  width: 80%;
+  margin: auto;
+  padding: 20px;
+}
+.categoryTitle {
+  text-align: left !important;
+}
+.parent {
+  width: 100%;
+}
+h1 {
+  text-align: center;
+}
+
+.foodParent {
+  display: flex;
+  justify-content: space-between;
+}
+.gramsInput {
+  border-radius: 7px;
+  border: 1px solid #b2acac;
+  height: 25px;
+  margin-left: 5px;
+  width: 115px;
+  padding-bottom: 3px;
+  padding-left: 4px;
+}
+.typeFruitList,
+.typeVegetableList,
+.typeCerealList,
+.typePulseList {
+  width: 23%;
+}
+
+.typeFruitList h3,
+.typeVegetableList h3,
+.typeCerealList h3,
+.typePulseList h3 {
+  text-align: center;
+  font-size: 18px;
+}
+
+[type="checkbox"] {
+  margin-right: 5px;
+}
+
+button {
+  display: block;
+  margin: 20px auto;
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.perGramTable {
+  margin-bottom: 30px;
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+th,
+td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: center;
+}
+
+th {
+  background-color: #f2f2f2;
+}
+
+tbody tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+form {
+  margin-top: 40px;
+}
+
+form > div {
+  display: flex;
+  align-items: center;
+}
+
+form > div > div {
+  margin-right: 20px;
+}
+
+form > div > div:last-child {
+  margin-right: 0;
+}
+
+input[type="text"] {
+  width: 300px;
+  padding: 8px;
+  font-size: 16px;
+}
+
+button[type="submit"] {
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.recipeSelection {
+  margin-top: 20px;
+}
+
+.recipeSelection > div {
+  margin-bottom: 10px;
+}
+
+/* media */

@@ -9,11 +9,12 @@ export default function Home() {
   const [foodGrams, setFoodGrams] = useState({});
   const [prompt, setPrompt] = useState("");
   const [response, setResponse] = useState("");
-  const [selectedItemsList, setSelectedItemsList] = useState([]);
-  //   const [totalSugar, setTotalSugar] = useState(0);
-  //   const [totalProtein, setTotalProtein] = useState(0);
-  //   const [totalCholestrol, setTotalCholestrol] = useState(0);
-
+  const [foodSelected, setFoodSelected] = useState([]); // Move the declaration inside the component
+  const [recipeItems, setRecipeItems] = useState([]);
+  const [totalSugar, setTotalSugar] = useState(0);
+  const [totalProtein, setTotalProtein] = useState(0);
+  const [totalCholestrol, setTotalCholestrol] = useState(0);
+  const [totalFibre, setTotalFibre] = useState(0);
   // Fruits list
 
   const fruitItems = [
@@ -128,7 +129,6 @@ export default function Home() {
     { id: 97, name: "Horse Gram" },
   ];
 
-  
   const handleSubmitGpt = (e) => {
     e.preventDefault();
     axios
@@ -164,21 +164,23 @@ export default function Home() {
       ]);
     }
   };
-  
-  const handleCheckboxChangeFromSelectedList = (item) => {
-    setSelectedFoods((prevSelectedFoods) =>
-      prevSelectedFoods.filter((selected) => selected.id !== item.id)
-    );
-    setFoodGrams((prevGrams) => {
-      // eslint-disable-next-line no-unused-vars
-      const { [item.id]: removedGram, ...rest } = prevGrams;
-      return rest;
-    });
+  const recipeAdd = (itemName) => {
+    const item = selectedFoods.find((food) => food.name === itemName);
+    if (item) {
+      setRecipeItems((prevRecipeItems) => [...prevRecipeItems, item]);
+    }
   };
-  
+  useEffect(() => {
+    const promptString = `Give me an Indian recipe having ${recipeItems
+      .map((item) => item.name)
+      .join(", ")}`;
+    setPrompt(promptString);
+  }, [recipeItems]);
 
   //   var i = 0;
   const handleSearch = async () => {
+    setFoodSelected([...selectedFoods]); // Set the state with selectedFoods
+
     console.log("foodGrams before calculation:", foodGrams);
     console.log("selectedFoods before calculation:", selectedFoods);
     const apiUrl = "https://trackapi.nutritionix.com/v2/natural/nutrients";
@@ -211,12 +213,6 @@ export default function Home() {
 
       const resolvedFoods = await Promise.all(promises);
       setFoodItems(resolvedFoods);
-
-      const selectedItems = selectedFoods.map((food) => ({
-        id: food.id,
-        name: food.name,
-      }));
-      setSelectedItemsList(selectedItems);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -231,30 +227,30 @@ export default function Home() {
 
   useEffect(() => {
     console.log("foodItems:", foodItems);
-    // console.log("selectedFoods:", selectedFoods);
-    // console.log("foodGrams:", foodGrams);
+
     setTotalCarbs(
       foodItems.reduce((total, food) => total + food.nf_total_carbohydrate, 0)
     );
-    // console.log(totalCarbs);
-    // setTotalCholestrol(
-    //   foodItems.reduce((total, food) => total + food.nf_cholesterol, 0)
-    // );
-    // setTotalProtein(
-    //   foodItems.reduce((total, food) => total + food.nf_protein, 0)
-    // );
-    // setTotalSugar(foodItems.reduce((total, food) => total + food.nf_sugars, 0));
+
+    setTotalCholestrol(
+      foodItems.reduce((total, food) => total + food.nf_cholesterol, 0)
+    );
+    setTotalProtein(
+      foodItems.reduce((total, food) => total + food.nf_protein, 0)
+    );
+    setTotalSugar(foodItems.reduce((total, food) => total + food.nf_sugars, 0));
+    setTotalFibre(
+      foodItems.reduce((total, food) => total + food.nf_dietary_fiber, 0)
+    );
   }, [foodItems]);
 
   return (
     <>
       <div className="containerFluid">
-        <h1>Nutrition API demo </h1>
-        <h3>Enter fruit items:</h3>
-
+        <h1>NutriFix </h1>
         <div className={styles.foodParent}>
           <div className={styles.typeFruitList}>
-            <h3>Fruits</h3>
+            <h3 className={styles.categoryTitle}>Fruits</h3>
             {fruitItems.map((fruit, index) => (
               <div key={index}>
                 <input
@@ -284,7 +280,7 @@ export default function Home() {
           </div>
 
           <div className={styles.typeVegetableList}>
-            <h3>Vegetables</h3>
+            <h3 className={styles.categoryTitle}>Vegetables</h3>
             {vegetableItems.map((vegetable, index) => (
               <div key={index}>
                 <input
@@ -319,7 +315,7 @@ export default function Home() {
             ))}
           </div>
           <div className={styles.typeCerealList}>
-            <h3>Cereals</h3>
+            <h3 className={styles.categoryTitle}>Cereals</h3>
             {cerealItems.map((cereal, index) => (
               <div key={index}>
                 <input
@@ -352,7 +348,7 @@ export default function Home() {
             ))}
           </div>
           <div className={styles.typePulseList}>
-            <h3>pulses</h3>
+            <h3 className={styles.categoryTitle}>pulses</h3>
             {pulseItems.map((pulse, index) => (
               <div key={index}>
                 <input
@@ -382,61 +378,117 @@ export default function Home() {
         </div>
 
         <button onClick={handleSearch}>Search</button>
-        <div className={styles.resultFlex}>
-          <div>
-            <h3>Result</h3>
-            <strong>Total carbohydrates = {totalCarbs.toFixed(2)}</strong>
-            <br />
-          </div>
-          <div>
-            {foodItems.map((food) => {
-              const carbsPer100g =
-                (food.nf_total_carbohydrate / food.serving_weight_grams) * 100;
-              return (
-                <p key={food.food_name}>
-                  {food.food_name} Carbs per 100g: {carbsPer100g.toFixed(2)}{" "}
-                  grams
-                </p>
-              );
-            })}
-          </div>
+
+        <div>
+          <table>
+            <tbody>
+              <tr>
+                <td>
+                  <strong>Total carbohydrates</strong>
+                </td>
+                <td>{totalCarbs.toFixed(2)}</td>
+              </tr>
+              <tr>
+                <td>
+                  <strong>Total protein</strong>
+                </td>
+                <td>{totalProtein.toFixed(2)}</td>
+              </tr>
+              <tr>
+                <td>
+                  <strong>Total cholestrol</strong>
+                </td>
+                <td>{totalCholestrol.toFixed(2)}</td>
+              </tr>
+              <tr>
+                <td>
+                  <strong>Total sugar</strong>
+                </td>
+                <td>{totalSugar.toFixed(2)}</td>
+              </tr>
+              <tr>
+                <td>
+                  <strong>Total fibre</strong>
+                </td>
+                <td>{totalFibre.toFixed(2)}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div>
+          <table>
+            <thead>
+              <tr>
+                <th>Food</th>
+                <th>Carbs (g)</th>
+                <th>Protein (g)</th>
+                <th>Cholesterol (mg)</th>
+                <th>Sugar (g)</th>
+                <th>Fiber (g)</th>
+              </tr>
+            </thead>
+            <tbody>
+              {foodItems.map((food) => {
+                const carbsPer100g =
+                  (food.nf_total_carbohydrate / food.serving_weight_grams) *
+                  100;
+                const proteinPer100g =
+                  (food.nf_protein / food.serving_weight_grams) * 100;
+                const cholesterolPer100g =
+                  (food.nf_cholesterol / food.serving_weight_grams) * 100;
+                const sugarPer100g =
+                  (food.nf_sugars / food.serving_weight_grams) * 100;
+                const fiberPer100g =
+                  (food.nf_dietary_fiber / food.serving_weight_grams) * 100;
+
+                return (
+                  <tr key={food.food_name}>
+                    <td>{food.food_name}</td>
+                    <td>{carbsPer100g.toFixed(2)}</td>
+                    <td>{proteinPer100g.toFixed(2)}</td>
+                    <td>{cholesterolPer100g.toFixed(2)}</td>
+                    <td>{sugarPer100g.toFixed(2)}</td>
+                    <td>{fiberPer100g.toFixed(2)}</td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
         </div>
       </div>
+
       <div>
         <form onSubmit={handleSubmitGpt}>
           <div>
             <div>
-              <label>just say something:</label>
+              <label>Recipe for the items</label>
             </div>
-            <div>
+            {/* <div>
               <input
                 type="text"
                 value={prompt}
                 onChange={(e) => setPrompt(e.target.value)}
               />
-            </div>
+            </div> */}
             <div>
-              <button type="submit">Submit</button>
+              <button type="submit">Recipe</button>
             </div>
           </div>
         </form>
         <div>
-          <h3>Selected Items</h3>
-          {selectedItemsList.map((item) => (
+          {foodSelected.map((item) => (
             <div key={item.id}>
               <input
                 type="checkbox"
-                id={`item-${item.id}`}
-                checked={selectedFoods.some(
-                  (selected) => selected.id === item.id
-                )}
-                onChange={() => handleCheckboxChangeFromSelectedList(item)} // Add onChange event handler
+                name={item.name}
+                id={item.id}
+                onChange={() => recipeAdd(item.name)}
               />
-              <label htmlFor={`item-${item.id}`}>{item.name}</label>
+              <label htmlFor={item.id}>{item.name}</label>
             </div>
           ))}
         </div>
-
         <div>
           <p>{response}</p> {/* Render the 'response' value */}
         </div>
