@@ -1,10 +1,15 @@
 import { useState, useEffect } from "react";
 import styles from "../styles/HomeStyles.module.css";
+import axios from "axios";
+
 export default function Home() {
   const [selectedFoods, setSelectedFoods] = useState([]);
   const [foodItems, setFoodItems] = useState([]);
   const [totalCarbs, setTotalCarbs] = useState(0);
   const [foodGrams, setFoodGrams] = useState({});
+  const [prompt, setPrompt] = useState("");
+  const [response, setResponse] = useState("");
+  const [selectedItemsList, setSelectedItemsList] = useState([]);
   //   const [totalSugar, setTotalSugar] = useState(0);
   //   const [totalProtein, setTotalProtein] = useState(0);
   //   const [totalCholestrol, setTotalCholestrol] = useState(0);
@@ -123,12 +128,24 @@ export default function Home() {
     { id: 97, name: "Horse Gram" },
   ];
 
-  const handleCheckboxChange = (food) => {
-    const foodId = food.id;
+  
+  const handleSubmitGpt = (e) => {
+    e.preventDefault();
+    axios
+      .post("http://localhost:3001", { prompt })
+      .then((res) => {
+        setResponse(res.data.response); // Access the 'response' property from the data object
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+  const handleCheckboxChangeFromFoodList = (item) => {
+    const foodId = item.id;
     if (selectedFoods.some((selected) => selected.id === foodId)) {
       // Food is already selected, remove it
-      setSelectedFoods(
-        selectedFoods.filter((selected) => selected.id !== foodId)
+      setSelectedFoods((prevSelectedFoods) =>
+        prevSelectedFoods.filter((selected) => selected.id !== foodId)
       );
       // Remove grams input for the unselected food
       setFoodGrams((prevGrams) => {
@@ -142,11 +159,23 @@ export default function Home() {
         ...selectedFoods,
         {
           id: foodId,
-          name: food.name,
+          name: item.name,
         },
       ]);
     }
   };
+  
+  const handleCheckboxChangeFromSelectedList = (item) => {
+    setSelectedFoods((prevSelectedFoods) =>
+      prevSelectedFoods.filter((selected) => selected.id !== item.id)
+    );
+    setFoodGrams((prevGrams) => {
+      // eslint-disable-next-line no-unused-vars
+      const { [item.id]: removedGram, ...rest } = prevGrams;
+      return rest;
+    });
+  };
+  
 
   //   var i = 0;
   const handleSearch = async () => {
@@ -154,7 +183,7 @@ export default function Home() {
     console.log("selectedFoods before calculation:", selectedFoods);
     const apiUrl = "https://trackapi.nutritionix.com/v2/natural/nutrients";
     const apiKey = "06a1ae0bf3f7765037e4053ffb7e97ae";
-  
+
     try {
       const promises = selectedFoods.map(async (food) => {
         const servingWeight = foodGrams[food.id] || 100; // Use input grams or default to 100g
@@ -172,28 +201,34 @@ export default function Home() {
         if (!response.ok) {
           throw new Error(`Error: ${response.statusText}`);
         }
-  
+
         const data = await response.json();
         return {
           ...data.foods[0],
           grams: servingWeight,
         };
       });
-  
+
       const resolvedFoods = await Promise.all(promises);
       setFoodItems(resolvedFoods);
+
+      const selectedItems = selectedFoods.map((food) => ({
+        id: food.id,
+        name: food.name,
+      }));
+      setSelectedItemsList(selectedItems);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
   };
-  
+
   //   foodItems.forEach((item)=>{
   //     <li> `Serving size of ${item.name}: ${item.serving_weight_grams} grams`</li>
   //   })
   // useEffect to recalculate total carbs whenever foodItems change
   // we used .reduce bcz it reduces all the elements of the array to a single value by repeatedly applying a function
   // .map function creates a new array by applying a function on each of the element of the arraay
- 
+
   useEffect(() => {
     console.log("foodItems:", foodItems);
     // console.log("selectedFoods:", selectedFoods);
@@ -229,7 +264,7 @@ export default function Home() {
                   checked={selectedFoods.some(
                     (selected) => selected.id === fruit.id
                   )}
-                  onChange={() => handleCheckboxChange(fruit)}
+                  onChange={() => handleCheckboxChangeFromFoodList(fruit)}
                 />
                 <label htmlFor={`fruit-${fruit.id}`}>{fruit.name}</label>
 
@@ -259,7 +294,7 @@ export default function Home() {
                   checked={selectedFoods.some(
                     (selected) => selected.id === vegetable.id
                   )}
-                  onChange={() => handleCheckboxChange(vegetable)}
+                  onChange={() => handleCheckboxChangeFromFoodList(vegetable)}
                 />{" "}
                 <label htmlFor={`vegetable-${vegetable.id}`}>
                   {vegetable.name}
@@ -275,7 +310,7 @@ export default function Home() {
                     onChange={(e) =>
                       setFoodGrams({
                         ...foodGrams,
-                        [vegetable.id]: e.target.value
+                        [vegetable.id]: e.target.value,
                       })
                     }
                   />
@@ -294,7 +329,7 @@ export default function Home() {
                   checked={selectedFoods.some(
                     (selected) => selected.id === cereal.id
                   )}
-                  onChange={() => handleCheckboxChange(cereal)}
+                  onChange={() => handleCheckboxChangeFromFoodList(cereal)}
                 />{" "}
                 <label htmlFor={`cereal-${cereal.id}`}>{cereal.name}</label>
                 {/* Display input for grams when the food is selected */}
@@ -327,7 +362,7 @@ export default function Home() {
                   checked={selectedFoods.some(
                     (selected) => selected.id === pulse.id
                   )}
-                  onChange={() => handleCheckboxChange(pulse)}
+                  onChange={() => handleCheckboxChangeFromFoodList(pulse)}
                 />{" "}
                 <label htmlFor={`pulse-${pulse.id}`}>{pulse.name}</label>
                 {/* Display input for grams when the food is selected */}
@@ -364,8 +399,46 @@ export default function Home() {
                 </p>
               );
             })}
-            
           </div>
+        </div>
+      </div>
+      <div>
+        <form onSubmit={handleSubmitGpt}>
+          <div>
+            <div>
+              <label>just say something:</label>
+            </div>
+            <div>
+              <input
+                type="text"
+                value={prompt}
+                onChange={(e) => setPrompt(e.target.value)}
+              />
+            </div>
+            <div>
+              <button type="submit">Submit</button>
+            </div>
+          </div>
+        </form>
+        <div>
+          <h3>Selected Items</h3>
+          {selectedItemsList.map((item) => (
+            <div key={item.id}>
+              <input
+                type="checkbox"
+                id={`item-${item.id}`}
+                checked={selectedFoods.some(
+                  (selected) => selected.id === item.id
+                )}
+                onChange={() => handleCheckboxChangeFromSelectedList(item)} // Add onChange event handler
+              />
+              <label htmlFor={`item-${item.id}`}>{item.name}</label>
+            </div>
+          ))}
+        </div>
+
+        <div>
+          <p>{response}</p> {/* Render the 'response' value */}
         </div>
       </div>
     </>
