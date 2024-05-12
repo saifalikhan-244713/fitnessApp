@@ -27,8 +27,8 @@ export default function Home() {
   const [exceedSugarIntake, setExceedSugarIntake] = useState(false);
   const [exceedTDEE, setExceedTDEE] = useState(false);
   const [exceedFiber, setExceedFiber] = useState(false);
-  // Fruits list
 
+  // Fruits list
   const fruitItems = [
     { id: 1, name: "Apple" },
     { id: 2, name: "Banana" },
@@ -134,6 +134,27 @@ export default function Home() {
     { id: 95, name: "Pigeon Peas" },
     { id: 91, name: "Urad Dal" },
   ];
+  // Inside your handleLogButtonClick function in the React component
+
+  const handleLogButtonClick = () => {
+    console.log("Total Carbs:", totalCarbs);
+    // Make a POST request to your Express server
+    axios
+      .post("http://localhost:3001", {
+        totalCarbs,
+        totalProtein,
+        totalFiber,
+        totalSugar,
+      })
+      .then((response) => {
+        // Handle the response if needed
+        console.log(response.data);
+      })
+      .catch((error) => {
+        // Handle errors if the request fails
+        console.error("Error logging nutrition data:", error);
+      });
+  };
 
   const handleSubmitGpt = (e) => {
     e.preventDefault();
@@ -560,6 +581,9 @@ export default function Home() {
           </table>
         </div>
         <div>
+          <button onClick={handleLogButtonClick}>LOG</button>
+        </div>
+        <div>
           <table>
             <thead>
               <tr>
@@ -600,7 +624,22 @@ export default function Home() {
           </table>
         </div>
       </div>
-
+      <div>
+        <button>Performance</button>
+      </div>
+      {/* <div>
+        <Link
+          to={{
+            pathname: "/nutrition",
+            state: {
+              totalCarbs: totalCarbsArray,
+              totalProtein: totalProteinArray,
+            },
+          }}
+        >
+          <button>Performance</button>
+        </Link>{" "}
+      </div> */}
       <div>
         <form onSubmit={handleSubmitGpt}>
           <div>
@@ -619,19 +658,19 @@ export default function Home() {
             </div>
           </div>
         </form>
-        <div className={styles.foodSelectedParent}> 
+        <div className={styles.foodSelectedParent}>
           <div className={styles.foodSelectedChild}>
-          {foodSelected.map((item) => (
-            <div key={item.id}>
-              <input
-                type="checkbox"
-                name={item.name}
-                id={item.id}
-                onChange={() => recipeAdd(item.name)}
-              />
-              <label htmlFor={item.id}>{item.name}</label>
-            </div>
-          ))}
+            {foodSelected.map((item) => (
+              <div key={item.id}>
+                <input
+                  type="checkbox"
+                  name={item.name}
+                  id={item.id}
+                  onChange={() => recipeAdd(item.name)}
+                />
+                <label htmlFor={item.id}>{item.name}</label>
+              </div>
+            ))}
           </div>
         </div>
         <div>

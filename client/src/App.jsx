@@ -3,8 +3,9 @@ import "./App.css";
 import Signup from "./assets/Signup";
 import Login from "./assets/Login";
 import Home from "./assets/Home";
-import {BrowserRouter, Routes, Route, } from 'react-router-dom'
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Calculator from "./assets/Calculator";
+// import NutritionPage from "./assets/NutritionPage";
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
         <Route path="/login" element={<Login />}></Route>
         <Route path="/home" element={<Home />}></Route>
         <Route path="/" element={<Calculator />}></Route>
+        {/* <Route path="/nutrition" element={<NutritionPage />}></Route> */}
       </Routes>
     </BrowserRouter>
   );
