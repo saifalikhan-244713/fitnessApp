@@ -6,6 +6,7 @@ const { OpenAI } = require("openai");
 require("dotenv").config();
 const bodyParser = require("body-parser");
 const Nutrition = require("./models/Nutrition"); // Import the Nutrition model
+const { DatasetController } = require("chart.js");
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY, // This is also the default, can be omitted
@@ -14,58 +15,55 @@ const openai = new OpenAI({
 const app = express();
 app.use(express.json());
 app.use(cors());
-app.use(bodyParser.json());
 
 mongoose.connect("mongodb://localhost:27017/user", {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
 
+app.post("/", (req, res) => {
+  console.log("Request received:");
+  console.log("Headers:", req.headers);
+  console.log("Body:", req.body);
 
-app.post("/", async (req, res) => {
-  // const { prompt } = req.body;
-
-  // const completion = await openai.completions.create({
-  //   model: "gpt-3.5-turbo-instruct",
-  //   prompt: prompt,
-  //   max_tokens: 30,
-  // });
-  // console.log(completion.choices[0].text);
-  // res.json({ response: completion.choices[0].text });
-
-  const { totalCarbs, totalProtein, totalFiber, totalSugar } = req.body;
-  // Send the response back to the client
-
-  try {
-    console.log("total carbs", totalCarbs);
-    // Create a new instance of the Nutrition model with the data
-    const nutrition = new Nutrition({
-      totalCarbs,
-      totalProtein,
-      totalFiber,
-      totalSugar,
-    });
-
-    // Save the nutrition data to MongoDB
-    const savedNutrition = await nutrition.save();
-
-    // Respond with a success message
-    res.json({ message: "Nutrition data logged successfully" });
-  } catch (error) {
-    // If an error occurs, respond with an error message
-    res
-      .status(500)
-      .json({ error: "An error occurred while logging nutrition data" });
+  const { totalCarbs, totalProtein, totalFiber, totalSugar, datee } = req.body;
+  if (!totalCarbs || !totalProtein || !totalFiber || !totalSugar || datee) {
+    return res.status(400).json({ error: "Missing data in request body" });
   }
+
+  const nutrition = new Nutrition({
+    totalCarbs,
+    totalProtein,
+    totalFiber,
+    totalSugar,
+    datee,
+  });
+
+  nutrition
+    .save()
+    .then((savedNutrition) => {
+      res.json({
+        message: "Nutrition data logged successfully",
+        savedNutrition,
+      });
+    })
+    .catch((error) => {
+      res
+        .status(500)
+        .json({ error: "An error occurred while logging nutrition data" });
+    });
 });
+
 app.get("/performance", async (req, res) => {
   try {
     // Fetch all nutrition data from MongoDB
     const nutritionData = await Nutrition.find({}, { _id: 0, __v: 0 });
-    
+
     // Format the data as separate arrays for each nutrient
     const totalCarbs = nutritionData.map((item) => item.totalCarbs.toFixed(2));
-    const totalProtein = nutritionData.map((item) => item.totalProtein.toFixed(2));
+    const totalProtein = nutritionData.map((item) =>
+      item.totalProtein.toFixed(2)
+    );
     const totalFiber = nutritionData.map((item) => item.totalFiber.toFixed(2));
     const totalSugar = nutritionData.map((item) => item.totalSugar.toFixed(2));
 
@@ -74,7 +72,9 @@ app.get("/performance", async (req, res) => {
   } catch (error) {
     // Handle errors
     console.error("Error fetching performance data:", error);
-    res.status(500).json({ error: "An error occurred while fetching performance data" });
+    res
+      .status(500)
+      .json({ error: "An error occurred while fetching performance data" });
   }
 });
 

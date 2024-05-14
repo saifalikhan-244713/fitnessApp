@@ -137,15 +137,27 @@ export default function Home() {
   // Inside your handleLogButtonClick function in the React component
 
   const handleLogButtonClick = () => {
-    console.log("Total Carbs:", totalCarbs);
+    // console.log("Total Carbs:", totalCarbs);
     // Make a POST request to your Express server
+    const today = new Date().toISOString().slice(0, 10);
+    const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+    const dayName = days[new Date(today).getDay()];
+
+    console.log(dayName, today);
     axios
-      .post("http://localhost:3001", {
-        totalCarbs,
-        totalProtein,
-        totalFiber,
-        totalSugar,
-      })
+      .post(
+        "http://localhost:3001/",
+        {
+          totalCarbs,
+          totalProtein,
+          totalFiber,
+          totalSugar,
+          datee: dayName,
+        },
+        {
+          headers: { "Content-Type": "application/json" },
+        }
+      )
       .then((response) => {
         // Handle the response if needed
         console.log(response.data);

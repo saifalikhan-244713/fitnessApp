@@ -1,4 +1,4 @@
-import  { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 
 const Performance = () => {
@@ -6,7 +6,8 @@ const Performance = () => {
 
   useEffect(() => {
     // Fetch performance data when the component mounts
-    axios.get("http://localhost:3001/performance")
+    axios
+      .get("http://localhost:3001/performance")
       .then((response) => {
         setPerformanceData(response.data);
       })
@@ -20,6 +21,8 @@ const Performance = () => {
       <h2>Performance Data</h2>
       {performanceData && (
         <div>
+          <h3>Total Carbs</h3>
+          <p>{performanceData.date.join(", ")}</p>
           <h3>Total Carbs</h3>
           <p>{performanceData.totalCarbs.join(", ")}</p>
           <h3>Total Protein</h3>
