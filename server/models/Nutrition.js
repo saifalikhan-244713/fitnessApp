@@ -7,4 +7,6 @@ const nutritionSchema = new mongoose.Schema({
   totalSugar: Number,
 });
 
+//Nutrtiton = collection with a schema defined in nutritionSchema
+
 module.exports = mongoose.model("Nutrition", nutritionSchema);

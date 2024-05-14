@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import styles from "../styles/HomeStyles.module.css";
 import axios from "axios";
-import { useLocation } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 export default function Home() {
   const location = useLocation();
@@ -625,7 +625,7 @@ export default function Home() {
         </div>
       </div>
       <div>
-        <button>Performance</button>
+        <Link to="/performance">Performance</Link>
       </div>
       {/* <div>
         <Link

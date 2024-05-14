@@ -58,6 +58,25 @@ app.post("/", async (req, res) => {
       .json({ error: "An error occurred while logging nutrition data" });
   }
 });
+app.get("/performance", async (req, res) => {
+  try {
+    // Fetch all nutrition data from MongoDB
+    const nutritionData = await Nutrition.find({}, { _id: 0, __v: 0 });
+    
+    // Format the data as separate arrays for each nutrient
+    const totalCarbs = nutritionData.map((item) => item.totalCarbs.toFixed(2));
+    const totalProtein = nutritionData.map((item) => item.totalProtein.toFixed(2));
+    const totalFiber = nutritionData.map((item) => item.totalFiber.toFixed(2));
+    const totalSugar = nutritionData.map((item) => item.totalSugar.toFixed(2));
+
+    // Send the formatted data to the client
+    res.json({ totalCarbs, totalProtein, totalFiber, totalSugar });
+  } catch (error) {
+    // Handle errors
+    console.error("Error fetching performance data:", error);
+    res.status(500).json({ error: "An error occurred while fetching performance data" });
+  }
+});
 
 app.post("/login", (req, res) => {
   const { email, password } = req.body;
