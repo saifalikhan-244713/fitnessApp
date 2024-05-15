@@ -26,8 +26,8 @@ app.post("/", (req, res) => {
   console.log("Headers:", req.headers);
   console.log("Body:", req.body);
 
-  const { totalCarbs, totalProtein, totalFiber, totalSugar, datee } = req.body;
-  if (!totalCarbs || !totalProtein || !totalFiber || !totalSugar || datee) {
+  const { totalCarbs, totalProtein, totalFiber, totalSugar, date } = req.body;
+  if (!totalCarbs || !totalProtein || !totalFiber || !totalSugar || !date) {
     return res.status(400).json({ error: "Missing data in request body" });
   }
 
@@ -36,7 +36,7 @@ app.post("/", (req, res) => {
     totalProtein,
     totalFiber,
     totalSugar,
-    datee,
+    date,
   });
 
   nutrition

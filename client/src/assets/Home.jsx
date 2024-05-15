@@ -139,11 +139,26 @@ export default function Home() {
   const handleLogButtonClick = () => {
     // console.log("Total Carbs:", totalCarbs);
     // Make a POST request to your Express server
-    const today = new Date().toISOString().slice(0, 10);
-    const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-    const dayName = days[new Date(today).getDay()];
+    const today = new Date();
+    const date = today.getDate().toString();
 
-    console.log(dayName, today);
+    // console.log("date:", today);
+    const days = [
+      "Sunday",
+      "Monday",
+      "Tuesday",
+      "Wednesday",
+      "Thursday",
+      "Friday",
+      "Saturday",
+    ];
+    const dayName = days[new Date(today).getDay()];
+    const dateModified = date + " " + dayName;
+    console.log(
+      "date modified:",
+      dateModified + " its type " + typeof dateModified
+    );
+    // console.log(dayName, today);
     axios
       .post(
         "http://localhost:3001/",
@@ -152,7 +167,7 @@ export default function Home() {
           totalProtein,
           totalFiber,
           totalSugar,
-          datee: dayName,
+          date: dateModified,
         },
         {
           headers: { "Content-Type": "application/json" },
