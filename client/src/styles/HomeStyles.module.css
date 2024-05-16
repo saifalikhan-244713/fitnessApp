@@ -19,7 +19,10 @@
 .typePulseList {
   text-align: left;
 }
-
+.linearGraph{
+  height: 500px;
+  width: 1000px;   
+}
 .containerFluid {
   width: 80%;
   margin: auto;
