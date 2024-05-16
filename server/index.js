@@ -32,10 +32,10 @@ app.post("/", (req, res) => {
   }
 
   const nutrition = new Nutrition({
-    totalCarbs,
-    totalProtein,
-    totalFiber,
-    totalSugar,
+    totalCarbs: parseFloat(totalCarbs.toFixed(2)),
+    totalProtein: parseFloat(totalProtein.toFixed(2)),
+    totalFiber: parseFloat(totalFiber.toFixed(2)),
+    totalSugar: parseFloat(totalSugar.toFixed(2)),
     date,
   });
 
@@ -56,21 +56,19 @@ app.post("/", (req, res) => {
 
 app.get("/performance", async (req, res) => {
   try {
-    // Fetch all nutrition data from MongoDB
     const nutritionData = await Nutrition.find({}, { _id: 0, __v: 0 });
+    console.log("Nutrition Data:", nutritionData);
 
-    // Format the data as separate arrays for each nutrient
     const totalCarbs = nutritionData.map((item) => item.totalCarbs.toFixed(2));
     const totalProtein = nutritionData.map((item) =>
       item.totalProtein.toFixed(2)
     );
     const totalFiber = nutritionData.map((item) => item.totalFiber.toFixed(2));
     const totalSugar = nutritionData.map((item) => item.totalSugar.toFixed(2));
+    const date = nutritionData.map((item) => item.date);
 
-    // Send the formatted data to the client
-    res.json({ totalCarbs, totalProtein, totalFiber, totalSugar });
+    res.json({ totalCarbs, totalProtein, totalFiber, totalSugar, date });
   } catch (error) {
-    // Handle errors
     console.error("Error fetching performance data:", error);
     res
       .status(500)
@@ -94,7 +92,8 @@ app.post("/register", (req, res) => {
     .then((employees1) => res.json(employees1))
     .catch((err) => res.json(err));
 });
-PORT = 3001;
+
+const PORT = 3001;
 app.listen(PORT, () => {
   console.log("server is running at port:", PORT);
 });
