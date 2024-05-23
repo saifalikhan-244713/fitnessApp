@@ -7,6 +7,7 @@
   flex-direction: row;
   justify-content: space-between;
 }
+
 .typeFruitList {
   text-align: left;
 }
@@ -86,7 +87,7 @@ h1 {
 }
 body {
   display: contents;
-  background-color: #9bcf53;
+  background-color: white;
 }
 .foodParent {
   display: flex;

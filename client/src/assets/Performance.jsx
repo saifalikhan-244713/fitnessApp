@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-// import styles from "../styles/HomeStyles.module.css";
+import styles from "../styles/HomeStyles.module.css";
 import axios from "axios";
 import {
   Chart as ChartJS,
@@ -57,21 +57,33 @@ const Performance = () => {
     labels: performanceData.date,
     datasets: [
       {
-        label: "protein",
+        label: "Protein",
         data: performanceData.totalProtein,
-        borderColor: "rgb(255, 99, 132)",
-        backgroundColor: "rgba(255, 99, 132, 0.5)",
+        borderColor: "#FF5580",
+        backgroundColor: "#FF5580",
       },
-      // {
-      //   label: "steps2",
-      //   data: [2000, 7000, 4000, 8000, 10000, 12000, 5000],
-      //   borderColor: "rgb(255, 99, 132)",
-      //   backgroundColor: "rgba(255, 99, 132, 0.5)",
-      // },
+      {
+        label: "Carbs",
+        data: performanceData.totalCarbs,
+        borderColor: "#40A578",
+        backgroundColor: "#40A578",
+      },
+      {
+        label: "Sugar",
+        data: performanceData.totalSugar,
+        borderColor: "#FF9F66",
+        backgroundColor: "#FF9F66",
+      },
+      {
+        label: "Fiber",
+        data: performanceData.totalFiber,
+        borderColor: "#5AB2FF",
+        backgroundColor: "#5AB2FF",
+      },
     ],
   };
   return (
-    <div>
+    <div className={styles.body2}>
       {/* <h2>Performance Data</h2>
       <h3>Dates</h3>
       <p>{performanceData.date.join(", ")}</p>

@@ -137,9 +137,20 @@ export default function Home() {
   // Inside your handleLogButtonClick function in the React component
 
   const handleLogButtonClick = () => {
-
     const today = new Date();
-    
+    const monthNum = today.getMonth() + 1;
+
+    const monthNames = [
+      "January", "February", "March", "April", "May", "June",
+      "July", "August", "September", "October", "November", "December"
+    ];
+    const month = monthNames[monthNum]
+    // console.log("day ", day);
+
+    const date = today.getDate();
+    console.log("date ", date);
+    const dateModified = month.toString() +" "+ date.toString();
+    console.log("date modified", dateModified);
     axios
       .post(
         "http://localhost:3001/",
@@ -148,7 +159,7 @@ export default function Home() {
           totalProtein,
           totalFiber,
           totalSugar,
-          date: today,
+          date: dateModified,
         },
         {
           headers: { "Content-Type": "application/json" },
@@ -260,7 +271,7 @@ export default function Home() {
     console.log("foodGrams before calculation:", foodGrams);
     console.log("selectedFoods before calculation:", selectedFoods);
     const apiUrl = "https://trackapi.nutritionix.com/v2/natural/nutrients";
-    const apiKey = "06a1ae0bf3f7765037e4053ffb7e97ae";
+    const apiKey = "5177cc1c34d9b2a6b68b55091cc24611";
 
     try {
       const promises = selectedFoods.map(async (food) => {

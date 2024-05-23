@@ -5,7 +5,7 @@ const nutritionSchema = new mongoose.Schema({
   totalProtein: Number,
   totalFiber: Number,
   totalSugar: Number,
-  date: Date, // Ensure you have a date field
+  date: String, // Ensure you have a date field
 }); 
 
 //Nutrtiton = collection with a schema defined in nutritionSchema
