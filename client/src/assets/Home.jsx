@@ -2,12 +2,17 @@ import { useState, useEffect } from "react";
 import styles from "../styles/HomeStyles.module.css";
 import axios from "axios";
 import { Link, useLocation } from "react-router-dom";
-
+import { useNavigate } from "react-router-dom";
+// import { logValue } from "../api";
+import { logout } from "../../../server/utils/authUtils";
 export default function Home() {
   const location = useLocation();
+  // const { email } = location.state || {};
+  const navigate = useNavigate();
 
+  // const [value, setValue] = useState(0);
   console.log(location.state);
-  const { proteinIntake, carbIntake, sugarIntake, tdee, fiberIntake } =
+  const { proteinIntake, carbIntake, sugarIntake, tdee, fiberIntake, email, firstName } =
     location.state || {};
 
   const [selectedFoods, setSelectedFoods] = useState([]);
@@ -135,43 +140,60 @@ export default function Home() {
     { id: 91, name: "Urad Dal" },
   ];
   // Inside your handleLogButtonClick function in the React component
-
+  const handleLogout = () => {
+    logout();
+    navigate("/login"); // Redirect to the login page after logging out
+  };
   const handleLogButtonClick = () => {
     const today = new Date();
     const monthNum = today.getMonth() + 1;
 
     const monthNames = [
-      "January", "February", "March", "April", "May", "June",
-      "July", "August", "September", "October", "November", "December"
+      "January",
+      "February",
+      "March",
+      "April",
+      "May",
+      "June",
+      "July",
+      "August",
+      "September",
+      "October",
+      "November",
+      "December",
     ];
-    const month = monthNames[monthNum]
-    // console.log("day ", day);
+    const month = monthNames[monthNum];
 
     const date = today.getDate();
-    console.log("date ", date);
-    const dateModified = month.toString() +" "+ date.toString();
+    const dateModified = month.toString() + " " + date.toString();
     console.log("date modified", dateModified);
+    console.log("email", email);
+
+    const payload = {
+      totalCarbs,
+      totalProtein,
+      totalFiber,
+      totalSugar,
+      date: dateModified,
+      email,
+    };
+
+    console.log("Payload:", payload);
+
     axios
-      .post(
-        "http://localhost:3001/",
-        {
-          totalCarbs,
-          totalProtein,
-          totalFiber,
-          totalSugar,
-          date: dateModified,
-        },
-        {
-          headers: { "Content-Type": "application/json" },
-        }
-      )
+      .post("http://localhost:3001/", payload, {
+        headers: { "Content-Type": "application/json" },
+      })
       .then((response) => {
         // Handle the response if needed
-        console.log(response.data);
+        console.log("Response data:", response.data);
       })
       .catch((error) => {
         // Handle errors if the request fails
-        console.error("Error logging nutrition data:", error);
+        console.error(
+          "Error logging nutrition data:",
+          error.response?.data || error.message
+        );
       });
   };
 
@@ -271,7 +293,7 @@ export default function Home() {
     console.log("foodGrams before calculation:", foodGrams);
     console.log("selectedFoods before calculation:", selectedFoods);
     const apiUrl = "https://trackapi.nutritionix.com/v2/natural/nutrients";
-    const apiKey = "5177cc1c34d9b2a6b68b55091cc24611";
+    const apiKey = "5b85e7232c4489df93c3b09be08a0af8";
 
     try {
       const promises = selectedFoods.map(async (food) => {
@@ -336,12 +358,19 @@ export default function Home() {
 
   return (
     <>
-      <div>
+      <div className={styles.userLogo}>
+        {/* <div>{email && <p>Email: {email}</p>}</div> */}
+        <div>{firstName && <p>{firstName.charAt(0)}</p>}</div>
+        <div className={styles.logoutButton}>  
+          <button onClick={handleLogout}>Logout</button>
+        </div>
+      </div>
+      <div className={styles.homeParent}>
         <h1 className={styles.lobsterRegular}>NutriFix</h1>
         <div className={styles.foodParent}>
           <div className={styles.typeFruitList}>
             <h3 className={styles.categoryTitle}>Fruits</h3>
-            <div className={styles.overflow}>
+            <div className={styles.itemsListOverflow}>
               {fruitItems.map((fruit, index) => (
                 <div className={styles.itemsName} key={index}>
                   <input
@@ -381,10 +410,9 @@ export default function Home() {
               ))}
             </div>
           </div>
-
           <div className={styles.typeVegetableList}>
             <h3 className={styles.categoryTitle}>Vegetables</h3>
-            <div className={styles.overflow}>
+            <div className={styles.itemsListOverflow}>
               {vegetableItems.map((vegetable, index) => (
                 <div className={styles.itemsName} key={index}>
                   <input
@@ -425,7 +453,7 @@ export default function Home() {
           </div>
           <div className={styles.typeCerealList}>
             <h3 className={styles.categoryTitle}>Cereals</h3>
-            <div className={styles.overflow}>
+            <div className={styles.itemsListOverflow}>
               {cerealItems.map((cereal, index) => (
                 <div className={styles.itemsName} key={index}>
                   <input
@@ -466,7 +494,7 @@ export default function Home() {
           </div>
           <div className={styles.typePulseList}>
             <h3 className={styles.categoryTitle}>pulses</h3>
-            <div className={styles.overflow}>
+            <div className={styles.itemsListOverflow}>
               {pulseItems.map((pulse, index) => (
                 <div className={styles.itemsName} key={index}>
                   <input
@@ -551,7 +579,7 @@ export default function Home() {
             </tbody>
           </table>
         </div> */}
-        <div className={styles.totalValue}>
+        <div className={styles.totalNutrientsValue}>
           <table>
             <tbody>
               <tr>
@@ -660,7 +688,7 @@ export default function Home() {
         </Link>{" "}
       </div> */}
       <div>
-        <form onSubmit={handleSubmitGpt}>
+        <form className={styles.recipeForm} onSubmit={handleSubmitGpt}>
           <div>
             <div>
               <label>Recipe for the items</label>
@@ -706,4 +734,4 @@ export default function Home() {
       </div>
     </>
   );
-}
+} 

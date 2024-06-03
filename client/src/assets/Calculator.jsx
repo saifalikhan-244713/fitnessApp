@@ -1,11 +1,13 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
+import styles from "../styles/calculatorStyles.module.css";
+
 const Calculator = () => {
-  const [weight, setWeight] = useState(0);
-  const [height, setHeight] = useState(0);
-  const [age, setAge] = useState(0);
+  const [weight, setWeight] = useState();
+  const [height, setHeight] = useState();
+  const [age, setAge] = useState();
   const [gender, setGender] = useState("male");
-  const [activityLevel, setActivityLevel] = useState(1.2);
+  const [activityLevel, setActivityLevel] = useState(0);
   const [calculated, setCalculated] = useState(false);
   const [tdee, setTdee] = useState(0);
   const [carbIntake, setCarbIntake] = useState(0);
@@ -14,12 +16,13 @@ const Calculator = () => {
   const [fiberIntake, setFiberIntake] = useState(0);
   const [calorieIntake, setCalorieIntake] = useState(0);
   const navigate = useNavigate();
+  const location = useLocation();
+
   useEffect(() => {
     const fiberValue = calculateFiberIntake();
     setFiberIntake(fiberValue);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tdee]);
-  
 
   const calculateBMR = () => {
     let bmr;
@@ -84,9 +87,7 @@ const Calculator = () => {
     return calorieIntake;
   };
 
-  const calculate = () => {
-
-    
+  const handleSubmit = () => {
     const recommendedFiberIntake = gender === "male" ? 38 : 25;
     const tdeeValue = calculateTDEE();
     const carbIntakeValue = calculateCarbIntake();
@@ -102,88 +103,79 @@ const Calculator = () => {
     setFiberIntake(fiberIntakeValue);
     setCalorieIntake(calorieIntakeValue);
     setCalculated(true);
-    
+    const email = location.state?.email;
+
+    console.log("email sent from calc", email);
     navigate("/home", {
-        state: {
-          proteinIntake: proteinIntakeValue,
-          carbIntake: carbIntakeValue,
-          sugarIntake: sugarIntakeValue,
-          fiberIntake: fiberIntakeValue,
-          tdee: tdeeValue,
-        },
-      });
+      state: {
+        proteinIntake: proteinIntakeValue,
+        carbIntake: carbIntakeValue,
+        sugarIntake: sugarIntakeValue,
+        fiberIntake: fiberIntakeValue,
+        tdee: tdeeValue,
+        email: email,
+      },
+    });
   };
 
   return (
-    <div>
-      <h2>Macronutrient Calculator</h2>
-      <div>
-        <label>
-          Weight (kg):
+    <>
+      <div className={styles.calculatorParent}>
+
+        <form className={styles.detailsForm} onSubmit={handleSubmit}>
+        <h2>Please enter your details</h2>
+
           <input
             type="number"
             value={weight}
+            placeholder="Weight (Kgs)"
             onChange={(e) => setWeight(parseFloat(e.target.value))}
           />
-        </label>
-      </div>
-      <div>
-        <label>
-          Height (cm):
           <input
             type="number"
             value={height}
+            placeholder="Height (cm)"
             onChange={(e) => setHeight(parseFloat(e.target.value))}
           />
-        </label>
-      </div>
-      <div>
-        <label>
-          Age:
           <input
             type="number"
             value={age}
+            placeholder="Age"
             onChange={(e) => setAge(parseInt(e.target.value))}
           />
-        </label>
-      </div>
-      <div>
-        <label>
-          Gender:
           <select value={gender} onChange={(e) => setGender(e.target.value)}>
             <option value="male">Male</option>
             <option value="female">Female</option>
           </select>
-        </label>
-      </div>
-      <div>
-        <label>
-          Activity Level:
           <select
             value={activityLevel}
             onChange={(e) => setActivityLevel(parseFloat(e.target.value))}
           >
+            <option value={0}>Your Activity Level</option>
             <option value={1.2}>Sedentary</option>
             <option value={1.375}>Lightly Active</option>
             <option value={1.55}>Moderately Active</option>
             <option value={1.725}>Very Active</option>
             <option value={1.9}>Extra Active</option>
           </select>
-        </label>
+          <button type="submit" className={styles.proceedButton}>Calculate</button>
+          {calculated && (
+            <div>
+              <h3>Results:</h3>
+              <p>
+                Total Daily Energy Expenditure (TDEE): {tdee.toFixed(2)}{" "}
+                kcal/day
+              </p>
+              <p>Carbohydrate Intake: {carbIntake.toFixed(2)} grams/day</p>
+              <p>Maximum Sugar Intake: {sugarIntake.toFixed(2)} grams/day</p>
+              <p>Protein Intake: {proteinIntake.toFixed(2)} grams/day</p>
+              <p>Fiber Intake: {fiberIntake.toFixed(2)} grams/day</p>
+              <p>Calorie Intake: {calorieIntake.toFixed(2)} kcal/day</p>
+            </div>
+          )}
+        </form>
       </div>
-      <button onClick={calculate}>Calculate</button>
-      {calculated && (
-        <div>
-          <h3>Results:</h3>
-          <p>Total Daily Energy Expenditure (TDEE): {tdee.toFixed(2)} kcal/day</p>
-          <p>Carbohydrate Intake: {carbIntake.toFixed(2)} grams/day</p>
-          <p>Maximum Sugar Intake: {sugarIntake.toFixed(2)} grams/day</p>
-          <p>Protein Intake: {proteinIntake.toFixed(2)} grams/day</p>
-          <p>Fiber Intake: {fiberIntake.toFixed(2)} grams/day</p>
-          <p>Calorie Intake: {calorieIntake.toFixed(2)} kcal/day</p>
-        </div>
-      )}
-    </div>
+    </>
   );
 };
 

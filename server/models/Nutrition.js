@@ -5,8 +5,8 @@ const nutritionSchema = new mongoose.Schema({
   totalProtein: Number,
   totalFiber: Number,
   totalSugar: Number,
-  date: String, // Ensure you have a date field
+  date: String, 
+  email: String, 
 }); 
 
-//Nutrtiton = collection with a schema defined in nutritionSchema
 module.exports = mongoose.model("Nutrition", nutritionSchema);

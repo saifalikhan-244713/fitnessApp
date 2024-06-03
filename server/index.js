@@ -1,33 +1,73 @@
+require("dotenv").config();
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
-const credentials = require("./models/Employee");
-const { OpenAI } = require("openai");
-require("dotenv").config();
 const bodyParser = require("body-parser");
-const Nutrition = require("./models/Nutrition"); // Import the Nutrition model
-const { DatasetController } = require("chart.js");
-
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY, // This is also the default, can be omitted
-});
+const Nutrition = require("./models/Nutrition");
+const authRoutes = require("./routes/authRoutes");
 
 const app = express();
-app.use(express.json());
-app.use(cors());
 
-mongoose.connect("mongodb://localhost:27017/user", {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
+app.use(express.json());
+app.use(bodyParser.json());
+
+app.use((req, res, next) => {
+  console.log("Request received:");
+  console.log("Headers:", req.headers);
+  console.log("Body here:", req.body);
+  console.log("req.body.email", req.body.email);
+  next();
+});
+
+// const app = express();
+
+app.use(cors());
+app.use("/api/auth", authRoutes); // Use authRoutes for authentication-related routes
+
+mongoose
+  .connect("mongodb://localhost:27017/myjwt2")
+  .then(() => console.log("MongoDB connected"))
+  .catch((err) => console.error("MongoDB connection error:", err));
+
+app.post("/api/logs", async (req, res) => {
+  const { email, value } = req.body;
+  try {
+    const log = new Log({ email, value });
+    await log.save();
+    res.status(201).json({ message: "Value logged successfully" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Error logging value" });
+  }
+});
+
+app.get("/api/logs", async (req, res) => {
+  const { email } = req.query;
+  try {
+    const logs = await Log.find({ email });
+    res.status(200).json(logs);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Error fetching logs" });
+  }
 });
 
 app.post("/", (req, res) => {
   console.log("Request received:");
   console.log("Headers:", req.headers);
-  console.log("Body:", req.body);
+  console.log("Body here:", req.body);
 
-  const { totalCarbs, totalProtein, totalFiber, totalSugar, date } = req.body;
-  if (!totalCarbs || !totalProtein || !totalFiber || !totalSugar || !date) {
+  const { totalCarbs, totalProtein, totalFiber, totalSugar, date, email } =
+    req.body;
+
+  if (
+    !totalCarbs ||
+    !totalProtein ||
+    !totalFiber ||
+    !totalSugar ||
+    !date ||
+    !email
+  ) {
     return res.status(400).json({ error: "Missing data in request body" });
   }
 
@@ -37,6 +77,7 @@ app.post("/", (req, res) => {
     totalFiber: parseFloat(totalFiber.toFixed(2)),
     totalSugar: parseFloat(totalSugar.toFixed(2)),
     date,
+    email,
   });
 
   nutrition
@@ -53,10 +94,15 @@ app.post("/", (req, res) => {
         .json({ error: "An error occurred while logging nutrition data" });
     });
 });
-
 app.get("/performance", async (req, res) => {
+  const { email } = req.query;
+
+  if (!email) {
+    return res.status(400).json({ error: "Email query parameter is required" });
+  }
+
   try {
-    const nutritionData = await Nutrition.find({}, { _id: 0, __v: 0 });
+    const nutritionData = await Nutrition.find({ email }, { _id: 0, __v: 0 });
     console.log("Nutrition Data:", nutritionData);
 
     const totalCarbs = nutritionData.map((item) => item.totalCarbs.toFixed(2));
@@ -76,24 +122,8 @@ app.get("/performance", async (req, res) => {
   }
 });
 
-app.post("/login", (req, res) => {
-  const { email, password } = req.body;
-  credentials.findOne({ email: email }).then((user) => {
-    if (user) {
-      if (user.password === password) res.json("success");
-      else res.json("the password is incorrect");
-    } else res.json("no record existed");
-  });
-});
+const PORT = process.env.PORT || 3001;
 
-app.post("/register", (req, res) => {
-  credentials
-    .create(req.body)
-    .then((employees1) => res.json(employees1))
-    .catch((err) => res.json(err));
-});
-
-const PORT = 3001;
 app.listen(PORT, () => {
-  console.log("server is running at port:", PORT);
+  console.log(`Server running on port ${PORT}`);
 });

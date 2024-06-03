@@ -1,6 +1,7 @@
 .foodParent {
   display: flex;
   justify-content: space-between;
+  margin: 0 50px;
 }
 .resultFlex {
   display: flex !important;
@@ -20,9 +21,9 @@
 .typePulseList {
   text-align: left;
 }
-.linearGraph{
+.linearGraph {
   height: 500px;
-  width: 1000px;   
+  width: 1000px;
 }
 .containerFluid {
   width: 80%;
@@ -40,15 +41,14 @@
   justify-content: center;
   flex-direction: column;
   text-align: left;
-
- 
 }
-.foodSelectedChild{
-    background-color: white;
-    padding: 10px;
-    height: 388px;
-    overflow-y: scroll;
-    border-radius: 0 0 8px 8px;
+.foodSelectedChild {
+  background-color: white;
+  padding: 10px;
+  height: 388px;
+  overflow-y: scroll;
+  position: relative;
+  border-radius: 0 0 8px 8px;
 }
 tbody tr:nth-child(even) {
   background-color: white !important;
@@ -66,16 +66,16 @@ tbody tr:nth-child(odd) {
   font-family: "Lobster", sans-serif;
   font-weight: 300;
   margin-bottom: -7px;
-  color: #42930d;
-  background-color: #bfea7c;
+  color: white;
+  background-color: #eb7474;
   height: 60px;
   border-radius: 8px 8px 0 0;
   font-style: normal;
   font-size: 25px !important;
 }
-.parent {
+/* .parent {
   width: 100%;
-}
+} */
 h1 {
   text-align: center;
 }
@@ -85,13 +85,10 @@ h1 {
   font-style: normal;
   color: rgb(99, 94, 94);
 }
-body {
-  display: contents;
-  background-color: white;
-}
+
 .foodParent {
   display: flex;
-  justify-content: space-between;
+  justify-content: space-around;
 }
 .itemsName {
   height: 27px;
@@ -117,7 +114,7 @@ body {
 .typeVegetableList,
 .typeCerealList,
 .typePulseList {
-  width: 24%;
+  width: 20%;
 }
 
 .typeFruitList h3,
@@ -131,18 +128,18 @@ body {
 [type="checkbox"] {
   margin-right: 5px;
 }
-.totalValue {
+.totalNutrientsValue {
   width: 500px;
   margin: auto;
   margin-bottom: 40px;
 }
-button {
+/* button {
   display: block;
   margin: 20px auto;
   padding: 10px 20px;
   font-size: 16px;
   cursor: pointer;
-}
+} */
 
 .perGramTable {
   margin-bottom: 30px;
@@ -159,72 +156,170 @@ td {
   padding: 8px;
   text-align: center;
 }
-body {
-  display: contents;
-}
-.overflow {
+
+.itemsListOverflow {
   height: 388px;
   background-color: white;
   padding: 10px;
   overflow-y: scroll;
   border-radius: 0 0 8px 8px;
-  /* scrollbar-width: thin;
-  scrollbar-color: #416D19 white; */
 }
+.loginForm {
+  background-color: #eceace;
+  padding: 15px;
+  border-radius: 10px;
+  display: block;
+}
+.loginButton {
+  width: 275px;
+  background-color:#ed4a4a;
+  color: white;
+  padding-bottom: 15px;
+  border: none;
+  padding: 4px 0;
+  border-radius: 3px;
+  margin-top: 10px;
+
+}
+.loginButton:hover {
+  background-color: #ab2c2c;
+  outline: none;
+  border: none;
+}
+.loginForm input {
+  margin: 8px;
+  display: block;
+  border: 1px solid #d0d0d0;
+  width: 275px;
+  padding: 8px 0px 8px 8px;
+  border-radius: 4px;
+  color: rgb(52, 51, 51);
+}
+.loginHead {
+  font-family: "Lobster", sans-serif;
+  color: #ed4a4a;
+  font-size: 25px;
+  margin-bottom: 30px;
+}
+.loginForm input:focus {
+  outline: none;
+}
+.errorMessage {
+  color: red;
+  font-size: 13px;
+  text-align: left;
+  margin-left: 8px;
+}
+.homeParent{
+  overflow-y: hidden;
+  background-color: #eceace;
+}
+::placeholder {
+  color: rgb(122, 121, 121) !important;
+  font-size: 14px;
+  padding-left: 4px;
+}
+.loginParent {
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+}
+.signupLink {
+  background: none;
+  padding: 0 8px;
+  color: #ab2c2c;
+  border: none;
+}
+.signupLink:hover{
+  color: rgb(242, 114, 135);
+}
+.loginRight {
+  /* background-color: #fb9b5a; */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  flex-direction: column;
+}
+.signupBtnBox {
+  background-color: #eceace;
+  color: #ed4a4a;
+  font-family: "Lobster", sans-serif;
+  width: 318px;
+  border-radius: 5px;
+  margin-top: 10px;
+  padding: 5px 0;
+}
+
 .lobsterRegular {
   font-family: "Lobster", sans-serif;
   font-weight: 300;
   font-size: 4rem !important;
   font-style: normal;
-  margin: 5px 0 60px 0;
-  color: #416d19;
+  margin: 20px 0 50px 0;
+  color: #ed4a4a;
 }
+
 ::-webkit-scrollbar {
   width: 8px;
 }
 
 /* Track */
 ::-webkit-scrollbar-track {
-  /* box-shadow: inset 0 0 5px grey;  */
+  background: rgb(248, 209, 209);
   border-radius: 10px;
+  padding-top: 50px;
+}
+
+input[type=checkbox]:checked {
+  accent-color: #e66969 !important;
 }
 
 /* Handle */
 ::-webkit-scrollbar-thumb {
-  background: #416d19;
-  border-radius: 0px;
+  background: #f1a2a2;
+  border-radius: 5px;
 }
 
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
-  background: #416d19;
+  background: #e86161;
 }
+
 th {
   background-color: #f2f2f2;
+}
+
+.userLogo {
+  position: absolute !important;
+  top: 0;
+  right: 20px;
+  display: flex;
+  align-items: baseline;
 }
 
 tbody tr:nth-child(even) {
   background-color: #f2f2f2;
 }
 
-form {
+recipeForm {
   margin-top: 40px;
 }
 
-form > div {
+recipeForm > div {
   display: flex;
   align-items: center;
 }
 
-form > div > div {
+recipeForm > div > div {
   margin-right: 20px;
 }
 
-form > div > div:last-child {
+recipeForm > div > div:last-child {
   margin-right: 0;
 }
 
-input[type="text"] {
+/* input[type="text"] {
   width: 300px;
   padding: 8px;
   font-size: 16px;
@@ -234,7 +329,7 @@ button[type="submit"] {
   padding: 10px 20px;
   font-size: 16px;
   cursor: pointer;
-}
+} */
 
 .recipeSelection {
   margin-top: 20px;
@@ -244,4 +339,186 @@ button[type="submit"] {
   margin-bottom: 10px;
 }
 
-/* media */
+/* Login */
+/* HomeStyles.module.css */
+
+.loginParent {
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.loginLeft {
+  font-family: "Lobster", sans-serif;
+  font-weight: 300;
+  font-size: 4rem !important;
+  font-style: normal;
+  color: #ed4a4a;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  height: 100vh;
+  padding: 0;
+}
+
+.logoutButton{
+  position: relative;
+  top: 30px;
+}
+
+.imageContainer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  pointer-events: none; /* So images don't interfere with user inputs */
+}
+
+.fruitImage {
+  width: 100px;
+  height: 100px;
+  position: absolute;
+  animation: floatIn 1s ease-out forwards;
+}
+body,
+html {
+  margin: 0;
+  padding: 0;
+  /* overflow: hidden; Prevent scrollbars */
+}
+@keyframes floatIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    transform: translate(0) rotate(45deg);
+    opacity: 1; 
+  }
+}
+@keyframes rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+.fruitImage {
+  width: 100px;
+  height: 100px;
+  position: absolute;
+  animation: floatIn 1s ease-out forwards, rotate 20s linear infinite;
+}
+
+/* Adjust positions and animation delays for each image */
+
+.fruitImage:nth-child(1) {
+  top: 20%;
+  left: 32%;
+  transform: translateY(-100vh); /* float in from top */
+}
+
+.fruitImage:nth-child(2) {
+  top: 30%;
+  left: 10%;
+  transform: translateX(-100vw); /* float in from left */
+}
+
+.fruitImage:nth-child(3) {
+  /*spinach*/
+  top: 8%;
+  left: 10%;
+  transform: translateY(-100vh); /* float in from top */
+}
+
+.fruitImage:nth-child(4) {
+  top: 3%;
+  right: 5%;
+  width: 125px;
+  position: absolute;
+  transform: translateY(-100vh); /* float in from right */
+}
+
+.fruitImage:nth-child(5) {
+  bottom: 18%;
+  left: 52%;
+  transform: translateY(100vh); /* float in from bottom */
+}
+
+.fruitImage:nth-child(6) {
+  top: 20%;
+  right: 3%;
+  transform: translateY(-100vh); /* float in from right */
+}
+
+.fruitImage:nth-child(7) {
+  /* pumpkin-top*/
+  top: 20%;
+  right: 25%;
+  transform: translateY(-100vh); /* float in from top */
+}
+
+.fruitImage:nth-child(8) {
+  top: 2%;
+  left: 30%;
+  transform: translateY(-100vh); /* float in from top */
+}
+
+.fruitImage:nth-child(9) {
+  top: 4%;
+  left: 55%;
+  transform: translateY(-100vh); /* float in from top */
+}
+
+.fruitImage:nth-child(10) {
+  bottom: 15%;
+  left: 25%;
+  transform: translateY(100vh); /* float in from bottom */
+  height: 140px;
+  width: 140px;
+}
+
+.fruitImage:nth-child(11) {
+  /*strawberry*/
+  bottom: 28%;
+  right: 8%;
+  transform: translateY(100vh); /* float in from bottom */
+}
+
+.fruitImage:nth-child(12) {
+  /* cabbage left*/
+  bottom: 35%;
+  left: 10%;
+  transform: translateX(-100vw); /* float in from left */
+}
+
+.fruitImage:nth-child(13) {
+  bottom: 6%;
+  left: 10%;
+  transform: translateX(-100vw); /* float in from left */
+}
+
+.fruitImage:nth-child(14) {
+  bottom: 45%;
+  right: 15%;
+  transform: translateY(-100vh); /* float in from right */
+}
+
+.fruitImage:nth-child(15) {
+  bottom: 3%;
+  right: 45%;
+  transform: translateY(100vh); /* float in from bottom */
+}
+
+.fruitImage:nth-child(16) {
+  bottom: 5%;
+  right: 7%;
+  transform: translateY(100vh); /* float in from bottom */
+}
+.fruitImage:nth-child(17) {
+  bottom: 5%;
+  right: 25%;
+  transform: translateY(100vh); /* float in from bottom */
+}
