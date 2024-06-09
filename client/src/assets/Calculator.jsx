@@ -18,6 +18,8 @@ const Calculator = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
+  const firstName = location.state?.firstName || "User";
+
   useEffect(() => {
     const fiberValue = calculateFiberIntake();
     setFiberIntake(fiberValue);
@@ -114,6 +116,7 @@ const Calculator = () => {
         fiberIntake: fiberIntakeValue,
         tdee: tdeeValue,
         email: email,
+        firstName,
       },
     });
   };
@@ -121,10 +124,9 @@ const Calculator = () => {
   return (
     <>
       <div className={styles.calculatorParent}>
-
+        <h2>Welcome, {firstName}</h2>
         <form className={styles.detailsForm} onSubmit={handleSubmit}>
-        <h2>Please enter your details</h2>
-
+          <h2>Please enter your details</h2>
           <input
             type="number"
             value={weight}
@@ -147,33 +149,26 @@ const Calculator = () => {
             <option value="male">Male</option>
             <option value="female">Female</option>
           </select>
-          <select
-            value={activityLevel}
-            onChange={(e) => setActivityLevel(parseFloat(e.target.value))}
-          >
-            <option value={0}>Your Activity Level</option>
+          <select value={activityLevel} onChange={(e) => setActivityLevel(parseFloat(e.target.value))}>
             <option value={1.2}>Sedentary</option>
-            <option value={1.375}>Lightly Active</option>
-            <option value={1.55}>Moderately Active</option>
-            <option value={1.725}>Very Active</option>
-            <option value={1.9}>Extra Active</option>
+            <option value={1.375}>Lightly active</option>
+            <option value={1.55}>Moderately active</option>
+            <option value={1.725}>Very active</option>
+            <option value={1.9}>Extra active</option>
           </select>
-          <button type="submit" className={styles.proceedButton}>Calculate</button>
-          {calculated && (
-            <div>
-              <h3>Results:</h3>
-              <p>
-                Total Daily Energy Expenditure (TDEE): {tdee.toFixed(2)}{" "}
-                kcal/day
-              </p>
-              <p>Carbohydrate Intake: {carbIntake.toFixed(2)} grams/day</p>
-              <p>Maximum Sugar Intake: {sugarIntake.toFixed(2)} grams/day</p>
-              <p>Protein Intake: {proteinIntake.toFixed(2)} grams/day</p>
-              <p>Fiber Intake: {fiberIntake.toFixed(2)} grams/day</p>
-              <p>Calorie Intake: {calorieIntake.toFixed(2)} kcal/day</p>
-            </div>
-          )}
+          <button type="submit">Calculate</button>
         </form>
+        {calculated && (
+          <div className={styles.results}>
+            <h3>Your Results:</h3>
+            <p>TDEE: {tdee} kcal/day</p>
+            <p>Carbohydrate Intake: {carbIntake} grams/day</p>
+            <p>Sugar Intake: {sugarIntake} grams/day</p>
+            <p>Protein Intake: {proteinIntake} grams/day</p>
+            <p>Fiber Intake: {fiberIntake} grams/day</p>
+            <p>Calorie Intake: {calorieIntake} kcal/day</p>
+          </div>
+        )}
       </div>
     </>
   );

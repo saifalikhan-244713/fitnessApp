@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import styles from "../styles/HomeStyles.module.css";
 import axios from "axios";
-import { Link, useLocation } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 // import { logValue } from "../api";
 import { logout } from "../../../server/utils/authUtils";
@@ -12,18 +12,25 @@ export default function Home() {
 
   // const [value, setValue] = useState(0);
   console.log(location.state);
-  const { proteinIntake, carbIntake, sugarIntake, tdee, fiberIntake, email, firstName } =
-    location.state || {};
+  const {
+    proteinIntake,
+    carbIntake,
+    sugarIntake,
+    tdee,
+    fiberIntake,
+    email,
+    firstName,
+  } = location.state || {};
 
   const [selectedFoods, setSelectedFoods] = useState([]);
   const [foodItems, setFoodItems] = useState([]);
   const [totalCarbs, setTotalCarbs] = useState(0);
   const [foodGrams, setFoodGrams] = useState({});
   const [totalCalories, setTotalCalories] = useState(0);
-  const [prompt, setPrompt] = useState("");
-  const [response, setResponse] = useState("");
-  const [foodSelected, setFoodSelected] = useState([]); // Move the declaration inside the component
-  const [recipeItems, setRecipeItems] = useState([]);
+  // const [prompt, setPrompt] = useState("");
+  // const [response, setResponse] = useState("");
+  // const [foodSelected, setFoodSelected] = useState([]); // Move the declaration inside the component
+  // const [recipeItems, setRecipeItems] = useState([]);
   const [totalSugar, setTotalSugar] = useState(0);
   const [totalProtein, setTotalProtein] = useState(0);
   const [totalFiber, setTotalFiber] = useState(0);
@@ -32,6 +39,7 @@ export default function Home() {
   const [exceedSugarIntake, setExceedSugarIntake] = useState(false);
   const [exceedTDEE, setExceedTDEE] = useState(false);
   const [exceedFiber, setExceedFiber] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
 
   // Fruits list
   const fruitItems = [
@@ -144,6 +152,12 @@ export default function Home() {
     logout();
     navigate("/login"); // Redirect to the login page after logging out
   };
+  const toggleMenu = () => {
+    setMenuOpen(!menuOpen);
+  };
+  const handlePerformance = () => {
+    navigate("/performance");
+  };
   const handleLogButtonClick = () => {
     const today = new Date();
     const monthNum = today.getMonth() + 1;
@@ -197,17 +211,17 @@ export default function Home() {
       });
   };
 
-  const handleSubmitGpt = (e) => {
-    e.preventDefault();
-    axios
-      .post("http://localhost:3001", { prompt })
-      .then((res) => {
-        setResponse(res.data.response); // Access the 'response' property from the data object
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
+  // const handleSubmitGpt = (e) => {
+  //   e.preventDefault();
+  //   axios
+  //     .post("http://localhost:3001", { prompt })
+  //     .then((res) => {
+  //       setResponse(res.data.response); // Access the 'response' property from the data object
+  //     })
+  //     .catch((err) => {
+  //       console.log(err);
+  //     });
+  // };
   const handleCheckboxChangeFromFoodList = (item) => {
     const foodId = item.id;
     if (selectedFoods.some((selected) => selected.id === foodId)) {
@@ -273,22 +287,22 @@ export default function Home() {
     fiberIntake,
   ]);
 
-  const recipeAdd = (itemName) => {
-    const item = selectedFoods.find((food) => food.name === itemName);
-    if (item) {
-      setRecipeItems((prevRecipeItems) => [...prevRecipeItems, item]);
-    }
-  };
-  useEffect(() => {
-    const promptString = `Give me an Indian recipe having ${recipeItems
-      .map((item) => item.name)
-      .join(", ")}`;
-    setPrompt(promptString);
-  }, [recipeItems]);
+  // const recipeAdd = (itemName) => {
+  //   const item = selectedFoods.find((food) => food.name === itemName);
+  //   if (item) {
+  //     setRecipeItems((prevRecipeItems) => [...prevRecipeItems, item]);
+  //   }
+  // };
+  // useEffect(() => {
+  //   const promptString = `Give me an Indian recipe having ${recipeItems
+  //     .map((item) => item.name)
+  //     .join(", ")}`;
+  //   setPrompt(promptString);
+  // }, [recipeItems]);
 
   //   var i = 0;
   const handleSearch = async () => {
-    +setFoodSelected([...selectedFoods]); // Set the state with selectedFoods
+    // +setFoodSelected([...selectedFoods]); // Set the state with selectedFoods
 
     console.log("foodGrams before calculation:", foodGrams);
     console.log("selectedFoods before calculation:", selectedFoods);
@@ -358,15 +372,59 @@ export default function Home() {
 
   return (
     <>
-      <div className={styles.userLogo}>
-        {/* <div>{email && <p>Email: {email}</p>}</div> */}
-        <div>{firstName && <p>{firstName.charAt(0)}</p>}</div>
-        <div className={styles.logoutButton}>  
-          <button onClick={handleLogout}>Logout</button>
-        </div>
-      </div>
       <div className={styles.homeParent}>
-        <h1 className={styles.lobsterRegular}>NutriFix</h1>
+        <div id="mainDiv">
+          <nav
+            className={`navbar ${styles.navCustom} navbar-expand-lg navbar-light`}
+          >
+            <div className="container-fluid">
+              <a className="navbar-brand " href="#">
+                <h1 className={styles.lobsterRegular}>NutriFix</h1>
+              </a>
+              <button
+                className="navbar-toggler"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#navbarNavAltMarkup"
+                aria-controls="navbarNavAltMarkup"
+                aria-expanded="false"
+                aria-label="Toggle navigation"
+              >
+                <span className="navbar-toggler-icon"></span>
+              </button>
+              <div className="collapse navbar-collapse" id="navbarNavAltMarkup">
+                <div className="navbar-nav ms-auto">
+                  {/* <div className={styles.userLogo}> */}
+                  <p className={styles.userLogo} onClick={toggleMenu}>
+                    {firstName.charAt(0)}
+                  </p>
+                  {/* </div> */}
+                  {menuOpen && (
+                    <div className={styles.menu}>
+                      <button
+                        className={styles.logoutBtn}
+                        onClick={handleLogout}
+                      >
+                        <i className="fa-solid fa-arrow-right-from-bracket"></i>{" "}
+                        Logout
+                      </button>
+                      {/* <div>
+                        <Link to="/performance">Performance</Link>
+                      </div> */}
+                      <button
+                        onClick={handlePerformance}
+                        className={styles.performanceBtn}
+                      >
+                        <i className="fa-solid fa-chart-line"></i>Performance
+                      </button>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+          </nav>
+        </div>
+
         <div className={styles.foodParent}>
           <div className={styles.typeFruitList}>
             <h3 className={styles.categoryTitle}>Fruits</h3>
@@ -535,7 +593,9 @@ export default function Home() {
           </div>
         </div>
 
-        <button onClick={handleSearch}>Calculate</button>
+        <button onClick={handleSearch} className={styles.calculateBtn}>
+          Calculate
+        </button>
 
         {/* <div className={styles.totalValue}>
           <table>
@@ -580,7 +640,7 @@ export default function Home() {
           </table>
         </div> */}
         <div className={styles.totalNutrientsValue}>
-          <table>
+          <table className={styles.roundedTable}>
             <tbody>
               <tr>
                 <td>
@@ -627,11 +687,14 @@ export default function Home() {
             </tbody>
           </table>
         </div>
+
         <div>
-          <button onClick={handleLogButtonClick}>LOG</button>
+          <button className={styles.logButton} onClick={handleLogButtonClick}>
+            LOG
+          </button>
         </div>
-        <div>
-          <table>
+        <div className={styles.unitTableParent}>
+          <table className={styles.unitTable}>
             <thead>
               <tr>
                 <th>Food</th>
@@ -671,9 +734,7 @@ export default function Home() {
           </table>
         </div>
       </div>
-      <div>
-        <Link to="/performance">Performance</Link>
-      </div>
+
       {/* <div>
         <Link
           to={{
@@ -688,24 +749,18 @@ export default function Home() {
         </Link>{" "}
       </div> */}
       <div>
-        <form className={styles.recipeForm} onSubmit={handleSubmitGpt}>
+        {/* <form className={styles.recipeForm} onSubmit={handleSubmitGpt}>
           <div>
             <div>
               <label>Recipe for the items</label>
             </div>
-            {/* <div>
-              <input
-                type="text"
-                value={prompt}
-                onChange={(e) => setPrompt(e.target.value)}
-              />
-            </div> */}
+            
             <div>
               <button type="submit">Recipe</button>
             </div>
           </div>
-        </form>
-        <div className={styles.foodSelectedParent}>
+        </form> */}
+        {/* <div className={styles.foodSelectedParent}>
           <div className={styles.foodSelectedChild}>
             {foodSelected.map((item) => (
               <div key={item.id}>
@@ -719,19 +774,11 @@ export default function Home() {
               </div>
             ))}
           </div>
-        </div>
-        <div>
-          <ul>
-            <li>{location.state.proteinIntake}</li>
-            <li>{location.state.carbIntake}</li>
-            <li>{location.state.sugarIntake}</li>
-            <li>{location.state.tdee}</li>
-          </ul>
-        </div>
-        <div>
-          <p>{response}</p> {/* Render the 'response' value */}
-        </div>
+        </div> */}
+        {/* <div>
+          <p>{response}</p>
+        </div> */}
       </div>
     </>
   );
-} 
+}

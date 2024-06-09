@@ -45,13 +45,17 @@ select {
   border: none;
 }
 .error {
-    color: red;
-    font-size: 12px;
-    margin-top: 5px;
-  }
+  color: red;
+  font-size: 12px;
+  margin-top: 5px;
+}
 h2 {
   font-family: "Lobster", sans-serif;
   color: #ed4a4a;
   font-size: 25px;
-  margin-bottom: 30px;
+  margin-top: 20px;
+}
+
+input[type="number"] {
+  color: gray;
 }

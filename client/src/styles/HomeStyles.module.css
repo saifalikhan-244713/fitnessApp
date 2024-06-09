@@ -8,7 +8,9 @@
   flex-direction: row;
   justify-content: space-between;
 }
-
+#headerNav {
+  background: transparent;
+}
 .typeFruitList {
   text-align: left;
 }
@@ -35,6 +37,11 @@
   border-radius: 20px;
   border: 3px solid orange;
 } */
+.body2 {
+  width: 1200px;
+  margin: auto;
+  margin-top: 50px;
+}
 .foodSelectedParent {
   display: flex;
   align-items: center;
@@ -131,7 +138,7 @@ h1 {
 .totalNutrientsValue {
   width: 500px;
   margin: auto;
-  margin-bottom: 40px;
+  /* margin-bottom: 40px; */
 }
 /* button {
   display: block;
@@ -172,14 +179,13 @@ td {
 }
 .loginButton {
   width: 275px;
-  background-color:#ed4a4a;
+  background-color: #ed4a4a;
   color: white;
   padding-bottom: 15px;
   border: none;
   padding: 4px 0;
   border-radius: 3px;
   margin-top: 10px;
-
 }
 .loginButton:hover {
   background-color: #ab2c2c;
@@ -210,7 +216,7 @@ td {
   text-align: left;
   margin-left: 8px;
 }
-.homeParent{
+.homeParent {
   overflow-y: hidden;
   background-color: #eceace;
 }
@@ -230,7 +236,7 @@ td {
   color: #ab2c2c;
   border: none;
 }
-.signupLink:hover{
+.signupLink:hover {
   color: rgb(242, 114, 135);
 }
 .loginRight {
@@ -271,7 +277,7 @@ td {
   padding-top: 50px;
 }
 
-input[type=checkbox]:checked {
+input[type="checkbox"]:checked {
   accent-color: #e66969 !important;
 }
 
@@ -289,13 +295,63 @@ input[type=checkbox]:checked {
 th {
   background-color: #f2f2f2;
 }
+.navCustom{
+  margin: 0 85px 0 42% !important;
+}
+.performanceBtn{
+  background-color: #e66969;
+  color: white;
+}
+.performanceBtn:hover{
+  background-color: white;
+  color: #e66969;
+  border: solid 1px #f0c4c4;
+}
+.logoutBtn{
+  margin:20px 0;
+  background-color: black;
+  color:white;
+}
+.logoutBtn:hover{
+  margin:20px 0;
+  background-color: white;
+  color:black;
+  border: solid 1px rgb(220, 214, 214);
+}
 
-.userLogo {
-  position: absolute !important;
-  top: 0;
-  right: 20px;
+.menu{
+  background-color:#eceace;
+  position: absolute;
+  height: 140px;
+  top: 100px;
   display: flex;
-  align-items: baseline;
+  right: 16px;
+  padding: 0 20px;
+  flex-direction: column;
+  border-radius: 11px;
+}
+.menu i{
+  margin-right: 10px;
+}
+.menu button{
+  text-align: left;
+
+}
+.userLogo {
+  text-align: center;
+  width: 40px;
+  height: 40px;
+  font-size: 24px;
+  background-color: #ed4a4a;
+  color: white;
+  padding-bottom: 2px;
+  border-radius: 100%;
+}
+
+.userLogo:hover {
+  background-color: #e72e2e;
+  outline: none;
+  border: none;
 }
 
 tbody tr:nth-child(even) {
@@ -362,9 +418,55 @@ button[type="submit"] {
   padding: 0;
 }
 
-.logoutButton{
-  position: relative;
-  top: 30px;
+.calculateBtn {
+  margin: 40px 0 60px 0;
+  padding: 8px 40px;
+  background-color: #ed4a4a;
+  color: white;
+  outline: none;
+  border: none;
+}
+
+.logButton {
+  margin: 20px 0 60px 0;
+  padding: 8px 40px;
+  background-color: #ed4a4a;
+  color: white;
+  outline: none;
+  border: none;
+}
+
+.calculateBtn:hover {
+  outline: none !important;
+  background-color: #e72e2e;
+}
+
+.logButton:hover {
+  outline: none !important;
+  background-color: #e72e2e;
+}
+
+.logoutButton button {
+  background-color: #ed4a4a;
+  color: white;
+  outline: none;
+  border: none;
+  font-weight: 600;
+  padding: 8px 17px;
+}
+.logoutButton button:hover {
+  outline: none !important;
+  color: white;
+  background-color: #e72e2e;
+}
+
+button:focus-visible {
+  outline: 2px solid blue; /* Customize the focus outline for keyboard users */
+}
+
+.totalNutrientsValue table tr:nth-child(1) {
+  border-radius: 10px 10px 0 0;
+  /* border-collapse: separate !important; */
 }
 
 .imageContainer {
@@ -394,7 +496,7 @@ html {
   }
   100% {
     transform: translate(0) rotate(45deg);
-    opacity: 1; 
+    opacity: 1;
   }
 }
 @keyframes rotate {
@@ -522,3 +624,40 @@ html {
   right: 25%;
   transform: translateY(100vh); /* float in from bottom */
 }
+
+.roundedTable {
+  /* border-collapse: separate; */
+  border-spacing: 0;
+  border-radius: 15px;
+  overflow: hidden;
+  margin-top: 50px;
+}
+.unitTableParent {
+  margin: 0 10%;
+}
+.unitTable {
+  border-spacing: 0;
+  border-radius: 15px;
+  overflow: hidden;
+  margin-top: 50px;
+}
+/* .roundedTable td, .roundedTable th {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+
+.roundedTable tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+.roundedTable tr:hover {
+  background-color: #ddd;
+}
+
+.roundedTable th {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: left;
+  background-color: #4CAF50;
+  color: white;
+} */
