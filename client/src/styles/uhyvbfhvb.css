@@ -1,0 +1,80 @@
+  .fruitImage:nth-child(1) {
+    /* apple-up */
+    position: absolute;
+    left: 0px !important;
+    top: 200px !important;
+  }
+  .fruitImage:nth-child(2) {
+    /* orange-down */
+    position: absolute;
+    left: 100px !important;
+    bottom: 100px !important;
+  }
+  .fruitImage:nth-child(3) {
+    /* spinach */
+    position: absolute;
+    top: 50px !important;
+    left: 40px !important;
+  }
+  .fruitImage:nth-child(6) {
+    /* beetroot */
+    position: absolute;
+    right: 10px !important;
+    top: 80px !important;
+  }
+  .fruitImage:nth-child(7) {
+    /* pumpkin-top */
+    position: absolute;
+    left: 200px !important;
+    top: 300px !important;
+  }
+  .fruitImage:nth-child(8) {
+    /* banana */
+    position: absolute;
+    left: 130px !important;
+    top: 0px !important;
+  }
+  .fruitImage:nth-child(9) {
+    /* grapes */
+    position: absolute;
+    left: 230px !important;
+    top: 65px !important;
+  }
+  .fruitImage:nth-child(10) {
+    /* pineapple */
+    position: absolute;
+    left: 0px !important;
+    bottom: 50px !important;
+    height: 100px !important;
+    width: 100px !important;
+  }
+  .fruitImage:nth-child(4) {
+    /* tomato */
+    position: absolute;
+    right: 80px !important;
+    top: 0px !important;
+  }
+  .fruitImage:nth-child(12) {
+    /* cabbage */
+    position: absolute;
+    left: 200px !important;
+    bottom: 280px !important;
+  }
+  .fruitImage:nth-child(13) {
+    /* orange-down */
+    position: absolute;
+    left: 0px !important;
+    bottom: 200px !important;
+  }
+  .fruitImage:nth-child(14) {
+    /* spinach-right */
+    position: absolute;
+    left: 0px !important;
+    top: 0px !important;
+  }
+  .fruitImage:nth-child(15) {
+    /* apple-down */
+    position: absolute;
+    bottom: 40px !important;
+    left: 130px !important;
+  }

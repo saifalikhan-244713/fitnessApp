@@ -1,10 +1,13 @@
 import { useState, useEffect, useMemo } from "react";
 import styles from "../styles/HomeStyles.module.css";
+import media from "../styles/mediaStyles.module.css";
 import axios from "axios";
 import { useLocation } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+import ReactMarkdown from "react-markdown";
 // import { logValue } from "../api";
 import { logout } from "../../../server/utils/authUtils";
+import useWindowWidth from "./customHooks/useWindowWidth";
 export default function Home() {
   const location = useLocation();
   // const { email } = location.state || {};
@@ -42,6 +45,10 @@ export default function Home() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [selectedItems, setSelectedItems] = useState([]);
   const [recipeItems, setRecipeItems] = useState([]);
+  const [answer, setAnswer] = useState("");
+  const [generatingAnswer, setGeneratingAnswer] = useState(false);
+  const [isAnswer, setIsAnswer] = useState(false);
+
   // Fruits list
   const fruitItems = useMemo(
     () => [
@@ -224,6 +231,40 @@ export default function Home() {
       });
   };
 
+  async function generateAnswer() {
+    setGeneratingAnswer(true);
+    setIsAnswer(true);
+    setAnswer("Loading your answer... \n It might take up to 10 seconds");
+
+    // Create the fixed prompt
+    console.log("recipeItems are ", recipeItems);
+    const fixedPrompt = `Generate an Indian recipe for the food items containing ${recipeItems.join(
+      ", "
+    )} in points but the heading will be the recipe name.`;
+
+    try {
+      const response = await axios({
+        url: `https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${
+          import.meta.env.VITE_APP_GEMINI_KEY
+        }`,
+        method: "post",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        data: {
+          contents: [{ parts: [{ text: fixedPrompt }] }],
+        },
+      });
+
+      setAnswer(response.data.candidates[0].content.parts[0].text);
+    } catch (error) {
+      console.error("Error:", error);
+      setAnswer("Sorry - Something went wrong. Please try again!");
+    }
+
+    setGeneratingAnswer(false);
+  }
+
   // const handleSubmitGpt = (e) => {
   //   e.preventDefault();
   //   axios
@@ -314,6 +355,9 @@ export default function Home() {
   // }, [recipeItems]);
 
   //   var i = 0;
+  const windowWidth = useWindowWidth();
+
+  const placeholderText = windowWidth < 668 ? "gms" : "Grams";
   const handleSearch = async () => {
     // +setFoodSelected([...selectedFoods]); // Set the state with selectedFoods
 
@@ -397,16 +441,15 @@ export default function Home() {
 
   const handleCheckboxChangeForRecipe = (item) => {
     setRecipeItems((prevRecipeItems) => {
-      if (prevRecipeItems.some((recipeItem) => recipeItem.id === item.id)) {
-        return prevRecipeItems.filter(
-          (recipeItem) => recipeItem.id !== item.id
-        );
+      if (prevRecipeItems.includes(item.name)) {
+        return prevRecipeItems.filter((name) => name !== item.name);
       } else {
-        console.log("Recipe items:", recipeItems); // Log the recipeItems array
-        return [...prevRecipeItems, item];
+        console.log("Recipe items:", [...prevRecipeItems, item.name]); // Log the updated recipeItems array
+        return [...prevRecipeItems, item.name];
       }
     });
   };
+
   useEffect(() => {
     console.log("Recipe items:", recipeItems); // Log the updated recipeItems array
   }, [recipeItems]);
@@ -416,13 +459,17 @@ export default function Home() {
       <div className={styles.homeParent}>
         <div id="mainDiv">
           <nav
-            className={`navbar ${styles.navCustom} navbar-expand-lg navbar-light`}
+            className={`navbar ${styles.navCustom} ${media.navCustom} navbar-expand-lg navbar-light`}
           >
             <div className="container-fluid">
-              <a className="navbar-brand " href="#">
-                <h1 className={styles.lobsterRegular}>NutriFix</h1>
+              <a className="navbar-brand " href="/home">
+                <h1
+                  className={`${styles.lobsterRegular} ${media.lobsterRegular}`}
+                >
+                  NutriFix
+                </h1>
               </a>
-              <button
+              {/* <button
                 className="navbar-toggler"
                 type="button"
                 data-bs-toggle="collapse"
@@ -432,44 +479,50 @@ export default function Home() {
                 aria-label="Toggle navigation"
               >
                 <span className="navbar-toggler-icon"></span>
-              </button>
-              <div className="collapse navbar-collapse" id="navbarNavAltMarkup">
-                <div className="navbar-nav ms-auto">
-                  {/* <div className={styles.userLogo}> */}
-                  <p className={styles.userLogo} onClick={toggleMenu}>
-                    {firstName.charAt(0)}
-                  </p>
-                  {/* </div> */}
-                  {menuOpen && (
-                    <div className={styles.menu}>
-                      <button
-                        className={styles.logoutBtn}
-                        onClick={handleLogout}
-                      >
-                        <i className="fa-solid fa-arrow-right-from-bracket"></i>{" "}
-                        Logout
-                      </button>
-                      {/* <div>
+              </button> */}
+              {/* <div className="collapse navbar-collapse" id="navbarNavAltMarkup"> */}
+              <div className="navbar-nav ms-auto">
+                {/* <div className={styles.userLogo}> */}
+                <p
+                  className={`${styles.userLogo} ${media.userLogo}`}
+                  onClick={toggleMenu}
+                >
+                  {firstName.charAt(0)}
+                </p>
+                {/* </div> */}
+                {menuOpen && (
+                  <div className={styles.menu}>
+                    <button className={styles.logoutBtn} onClick={handleLogout}>
+                      <i className="fa-solid fa-arrow-right-from-bracket"></i>{" "}
+                      Logout
+                    </button>
+                    {/* <div>
                         <Link to="/performance">Performance</Link>
                       </div> */}
-                      <button
-                        onClick={handlePerformance}
-                        className={styles.performanceBtn}
-                      >
-                        <i className="fa-solid fa-chart-line"></i>Performance
-                      </button>
-                    </div>
-                  )}
-                </div>
+                    <button
+                      onClick={handlePerformance}
+                      className={styles.performanceBtn}
+                    >
+                      <i className="fa-solid fa-chart-line"></i>Performance
+                    </button>
+                  </div>
+                )}
               </div>
+              {/* </div> */}
             </div>
           </nav>
         </div>
 
-        <div className={styles.foodParent}>
-          <div className={styles.typeFruitList}>
+        <div
+          className={`row row-gap-3 ${media.foodParent} ${styles.foodParent}`}
+        >
+          <div
+            className={`${styles.typeFruitList} ${media.typeFruitList} col-sm-6 col-md-6 col-lg-4 col-xl-3`}
+          >
             <h3 className={styles.categoryTitle}>Fruits</h3>
-            <div className={styles.itemsListOverflow}>
+            <div
+              className={`${styles.itemsListOverflow} ${media.itemsListOverflow}`}
+            >
               {fruitItems.map((fruit, index) => (
                 <div className={styles.itemsName} key={index}>
                   <input
@@ -494,8 +547,8 @@ export default function Home() {
                   ) && (
                     <input
                       type="number"
-                      className={styles.gramsInput}
-                      placeholder="grams"
+                      className={`gramsInput2 ${media.gramsInput} ${styles.gramsInput}`}
+                      placeholder={placeholderText}
                       value={foodGrams[fruit.id] ?? ""}
                       onChange={(e) =>
                         setFoodGrams({
@@ -509,9 +562,13 @@ export default function Home() {
               ))}
             </div>
           </div>
-          <div className={styles.typeVegetableList}>
+          <div
+            className={`${styles.typeVegetableList} ${media.typeVegetableList} col-sm-6 col-md-6 col-lg-4 col-xl-3 `}
+          >
             <h3 className={styles.categoryTitle}>Vegetables</h3>
-            <div className={styles.itemsListOverflow}>
+            <div
+              className={`${styles.itemsListOverflow} ${media.itemsListOverflow}`}
+            >
               {vegetableItems.map((vegetable, index) => (
                 <div className={styles.itemsName} key={index}>
                   <input
@@ -535,8 +592,8 @@ export default function Home() {
                   ) && (
                     <input
                       type="number"
-                      className={styles.gramsInput}
-                      placeholder="grams"
+                      className={`gramsInput2 ${media.gramsInput} ${styles.gramsInput}`}
+                      placeholder={placeholderText}
                       value={foodGrams[vegetable.id] ?? ""}
                       onChange={(e) =>
                         setFoodGrams({
@@ -550,9 +607,13 @@ export default function Home() {
               ))}
             </div>
           </div>
-          <div className={styles.typeCerealList}>
+          <div
+            className={`${styles.typeCerealList} ${media.typeCerealList} col-sm-6 col-md-6 col-lg-4 col-xl-3`}
+          >
             <h3 className={styles.categoryTitle}>Cereals</h3>
-            <div className={styles.itemsListOverflow}>
+            <div
+              className={`${styles.itemsListOverflow} ${media.itemsListOverflow}`}
+            >
               {cerealItems.map((cereal, index) => (
                 <div className={styles.itemsName} key={index}>
                   <input
@@ -576,8 +637,8 @@ export default function Home() {
                   ) && (
                     <input
                       type="number"
-                      className={styles.gramsInput}
-                      placeholder="grams"
+                      className={`gramsInput2 ${media.gramsInput} ${styles.gramsInput}`}
+                      placeholder={placeholderText}
                       value={foodGrams[cereal.id] ?? ""}
                       onChange={(e) =>
                         setFoodGrams({
@@ -591,9 +652,13 @@ export default function Home() {
               ))}
             </div>
           </div>
-          <div className={styles.typePulseList}>
+          <div
+            className={`${styles.typePulseList} ${media.typePulseList} col-sm-6 col-md-6 col-lg-4 col-xl-3`}
+          >
             <h3 className={styles.categoryTitle}>pulses</h3>
-            <div className={styles.itemsListOverflow}>
+            <div
+              className={`${styles.itemsListOverflow} ${media.itemsListOverflow}`}
+            >
               {pulseItems.map((pulse, index) => (
                 <div className={styles.itemsName} key={index}>
                   <input
@@ -617,8 +682,8 @@ export default function Home() {
                   ) && (
                     <input
                       type="number"
-                      className={styles.gramsInput}
-                      placeholder="grams"
+                      className={`gramsInput2 ${media.gramsInput} ${styles.gramsInput}`}
+                      placeholder={placeholderText}
                       value={foodGrams[pulse.id] ?? ""}
                       onChange={(e) =>
                         setFoodGrams({
@@ -638,50 +703,12 @@ export default function Home() {
           Calculate
         </button>
 
-        {/* <div className={styles.totalValue}>
-          <table>
-            <tbody>
-              <tr>
-                <td>
-                  <strong>Total carbohydrates</strong>
-                </td>
-                <td>{totalCarbs.toFixed(2)}</td>
-              </tr>
-              <tr>
-                <td>
-                  <strong>Total protein</strong>
-                </td>
-                <td>{totalProtein.toFixed(2)}</td>
-              </tr>
-              <tr>
-                <td>
-                  <strong>Total cholestrol</strong>
-                </td>
-                <td>{totalCholestrol.toFixed(2)}</td>
-              </tr>
-              <tr>
-                <td>
-                  <strong>Total calories</strong>
-                </td>
-                <td>{totalCalories.toFixed(2)}</td>
-              </tr>
-              <tr>
-                <td>
-                  <strong>Total sugar</strong>
-                </td>
-                <td>{totalSugar.toFixed(2)}</td>
-              </tr>
-              <tr>
-                <td>
-                  <strong>Total fibre</strong>
-                </td>
-                <td>{totalFiber.toFixed(2)}</td>
-              </tr>
-            </tbody>
-          </table>
-        </div> */}
-        <div className={styles.totalNutrientsValue}>
-          <table className={styles.roundedTable}>
+        <div
+          className={`${styles.totalNutrientsValue} ${media.totalNutrientsValue}`}
+        >
+          <h4>Total Value of Nutrition for Selected Items</h4>
+
+          <table className={`${styles.roundedTable} ${media.roundedTable}`}>
             <tbody>
               <tr>
                 <td>
@@ -731,19 +758,19 @@ export default function Home() {
 
         <div>
           <button className={styles.logButton} onClick={handleLogButtonClick}>
-            LOG
+            Log into Database
           </button>
         </div>
-        <div className={styles.unitTableParent}>
-          <table className={styles.unitTable}>
+        <div className={`${styles.unitTableParent} ${media.unitTableParent}`}>
+          <table className={`${styles.unitTable} ${media.unitTable}`}>
             <thead>
               <tr>
                 <th>Food</th>
-                <th>Carbs (g)</th>
-                <th>Protein (g)</th>
-                <th>Cholesterol (mg)</th>
-                <th>Sugar (g)</th>
-                <th>Fiber (g)</th>
+                <th>Carbs (per 100g)</th>
+                <th>Protein (per 100g)</th>
+                <th>Cholesterol (per 100mg)</th>
+                <th>Sugar (per 100g)</th>
+                <th>Fiber (per 100g)</th>
               </tr>
             </thead>
             <tbody>
@@ -774,28 +801,56 @@ export default function Home() {
             </tbody>
           </table>
         </div>
-      </div>
+        <div className={`${styles.selectedItems} ${media.selectedItems}`}>
+          {selectedItems.length > 0 ? (
+            <>
+              <h3>Selected Food Items For Recipe</h3>
 
-      <div className={styles.selectedItems}>
-        <h3>Selected Food Items:</h3>
-        {selectedItems.length > 0 ? (
-          <ul>
-            {selectedItems.map((item) => (
-              <li key={item.id}>
-                <input
-                  type="checkbox"
-                  checked={recipeItems.some(
-                    (recipeItem) => recipeItem.id === item.id
-                  )}
-                  onChange={() => handleCheckboxChangeForRecipe(item)}
-                />
-                <label htmlFor={`recipe-${item.id}`}>{item.name}</label>
-              </li>
-            ))}
-          </ul>
-        ) : (
-          <h3>Please select the food items</h3>
-        )}
+              <ul
+                className={`${styles.recipeItemsList} ${media.recipeItemsList}`}
+              >
+                {selectedItems.map((item) => (
+                  <li key={item.id}>
+                    <input
+                      type="checkbox"
+                      checked={recipeItems.includes(item.name)}
+                      onChange={() => handleCheckboxChangeForRecipe(item)}
+                    />
+                    <label htmlFor={`recipe-${item.id}`}>{item.name}</label>
+                  </li>
+                ))}
+              </ul>
+              <div className=" h-screen p-3">
+                <div className="text-center rounded bg-gray-50 ">
+                  <button
+                    onClick={generateAnswer}
+                    className={`${styles.recipeBtn} ${media.recipeBtn}`}
+                    disabled={generatingAnswer}
+                  >
+                    Generate Recipe
+                  </button>
+                </div>
+              </div>
+            </>
+          ) : (
+            <h3
+              id={`${styles.selectedItemsHead2} ${styles.selectedItemsHead2}`}
+            >
+              Please select food items for recipe
+            </h3>
+          )}
+          {isAnswer && (
+            <div
+              className={`m-auto text-center rounded bg-gray-50 my-1 ${styles.recipeDiv}`}
+            >
+              {answer && (
+                <ReactMarkdown className={`${styles.recipeAnswer} ${media.recipeAnswer}`}>
+                  {answer}
+                </ReactMarkdown>
+              )}
+            </div>
+          )}
+        </div>
       </div>
     </>
   );

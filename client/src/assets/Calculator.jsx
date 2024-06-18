@@ -124,7 +124,7 @@ const Calculator = () => {
   return (
     <>
       <div className={styles.calculatorParent}>
-        <h2>Welcome, {firstName}</h2>
+        <h2 className={styles.welcomeHead}>Welcome, {firstName}</h2>
         <form className={styles.detailsForm} onSubmit={handleSubmit}>
           <h2>Please enter your details</h2>
           <input

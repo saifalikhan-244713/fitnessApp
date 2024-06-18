@@ -1,6 +1,6 @@
 .foodParent {
-  display: flex;
-  justify-content: space-between;
+  /* display: flex; */
+  /* justify-content: space-between; */
   margin: 0 50px;
 }
 .resultFlex {
@@ -37,6 +37,155 @@
   border-radius: 20px;
   border: 3px solid orange;
 } */
+.recipeItemsList {
+  margin: 0 auto;
+  overflow-y: auto;
+  width: 250px;
+  text-align: left;
+  list-style-type: none;
+}
+.totalNutrientsValue h4 {
+  margin: 0;
+  background-color: rgb(72, 71, 71);
+}
+.userLogo {
+  position: relative;
+  bottom: 6px;
+}
+#selectedItemsHead2 {
+  display: inline-block;
+  text-align: center !important;
+  font-family: "Lobster", sans-serif;
+  font-weight: 300;
+  width: 400px;
+  margin-top: 100px;
+  margin-bottom: 125px;
+  padding-top: 15px;
+  color: white;
+  background-color: #f96161;
+  height: 60px;
+  border-radius: 8px;
+  font-style: normal;
+  font-size: 25px !important;
+}
+.unitTable th {
+  background-color: rgb(72, 71, 71);
+  color: white;
+}
+#selectedItemsHead2:hover {
+  background-color: #f03f3f;
+}
+/* .recipeAnswer ul,
+ol {
+  list-style-type: none;
+} */
+.recipeAnswer {
+  width: 1000px;
+  margin: 0 auto;
+  text-align: left;
+  background-color: white;
+  border-radius: 30px;
+  margin-bottom: 25px;
+}
+.performanceParent {
+  width: 70vw;
+  margin: 0 auto;
+}
+
+.recipeAnswer ul {
+  padding-left: 3rem;
+  padding-right: 2rem;
+}
+.recipeAnswer li {
+  color: #424040;
+}
+.recipeAnswer p:nth-child(1) {
+  display: inline-block;
+  text-align: center !important;
+  font-family: "Lobster", sans-serif;
+  font-weight: 300;
+  width: 1000px;
+  padding-left: 0 !important;
+  padding-top: 15px;
+  margin-bottom: 0;
+  background-color: #ed4a4a;
+  color: white;
+  height: 60px;
+  border-radius: 30px 30px 0 0;
+  font-style: normal;
+  font-size: 25px !important;
+}
+.recipeAnswer p:nth-child(2) {
+  margin-top: 20px;
+}
+.recipeAnswer ul:nth-last-child(1) {
+  padding-bottom: 25px;
+}
+.recipeAnswer p {
+  padding-left: 32px;
+  font-family: "Lobster", sans-serif;
+  font-size: 30px;
+}
+.selectedItems {
+  padding-bottom: 60px;
+}
+.selectedItems h3 {
+  position: relative;
+  top: 15px;
+  display: inline-block;
+  padding: 15px 10px 0 10px;
+  text-align: center !important;
+  font-family: "Lobster", sans-serif;
+  font-weight: 300;
+  width: 350px;
+  margin-top: 100px;
+  margin-bottom: 0px !important;
+  font: fallback;
+  color: white;
+  background-color: #f96161;
+  height: 60px;
+  border-radius: 8px;
+  font-style: normal;
+  font-size: 25px;
+}
+.recipeItemsList {
+  max-height: 208px;
+  width: 350px;
+  background-color: white;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  border-radius: 0 0 8px 8px;
+  z-index: 9999;
+  position: relative;
+}
+.performanceParent {
+  width: 100%;
+  text-align: center;
+  margin: 0 auto;
+}
+.performanceParent canvas {
+  box-sizing: border-box;
+  display: block;
+  height: 523px;
+  margin: 25px auto;
+  width: 1046px;
+}
+.chart {
+  margin: 0 auto;
+}
+.recipeBtn {
+  margin: 0px 0 60px 0;
+  padding: 6px 40px;
+  background-color: #ed4a4a;
+  color: white;
+  outline: none;
+  border: none;
+  width: 350px;
+}
+.recipeBtn:hover {
+  outline: none !important;
+  background-color: #e72e2e;
+}
 .body2 {
   width: 1200px;
   margin: auto;
@@ -102,27 +251,32 @@ h1 {
 }
 
 .gramsInput {
-  border: 1px solid #b2acac;
-  border-top: none;
-  border-left: none;
+  border: 1px solid gray;
+  /* border-top: none;
+  border-left: none; */
+  width: 56px;
+  border-radius: 5p;
   height: 20px;
+  padding-left: 0;
   position: relative;
+  border-radius: 4px;
   bottom: 4px;
   margin-left: 8px;
   font-size: 13px;
   width: 80px;
   text-align: center;
-  border-right: none;
+  /* border-right: none; */
 }
 .gramsInput:focus {
   outline: none;
+  color: black;
 }
-.typeFruitList,
+/* .typeFruitList,
 .typeVegetableList,
 .typeCerealList,
 .typePulseList {
   width: 20%;
-}
+} */
 
 .typeFruitList h3,
 .typeVegetableList h3,
@@ -165,7 +319,7 @@ td {
 }
 
 .itemsListOverflow {
-  height: 388px;
+  /* height: 388px; */
   background-color: white;
   padding: 10px;
   overflow-y: scroll;
@@ -217,8 +371,12 @@ td {
   margin-left: 8px;
 }
 .homeParent {
-  overflow-y: hidden;
+  overflow: hidden;
   background-color: #eceace;
+}
+.loginChildFlex {
+  width: 800px;
+  overflow: hidden;
 }
 ::placeholder {
   color: rgb(122, 121, 121) !important;
@@ -226,9 +384,9 @@ td {
   padding-left: 4px;
 }
 .loginParent {
-  width: 100vw;
+  width: 80vw;
   height: 100vh;
-  overflow: hidden;
+  overflow-y: auto !important;
 }
 .signupLink {
   background: none;
@@ -260,7 +418,7 @@ td {
 .lobsterRegular {
   font-family: "Lobster", sans-serif;
   font-weight: 300;
-  font-size: 4rem !important;
+  font-size: 4rem;
   font-style: normal;
   margin: 20px 0 50px 0;
   color: #ed4a4a;
@@ -295,32 +453,32 @@ input[type="checkbox"]:checked {
 th {
   background-color: #f2f2f2;
 }
-.navCustom{
-  margin: 0 85px 0 42% !important;
+.navCustom {
+  margin: 0 50px;
 }
-.performanceBtn{
+.performanceBtn {
   background-color: #e66969;
   color: white;
 }
-.performanceBtn:hover{
+.performanceBtn:hover {
   background-color: white;
   color: #e66969;
   border: solid 1px #f0c4c4;
 }
-.logoutBtn{
-  margin:20px 0;
+.logoutBtn {
+  margin: 20px 0;
   background-color: black;
-  color:white;
+  color: white;
 }
-.logoutBtn:hover{
-  margin:20px 0;
+.logoutBtn:hover {
+  margin: 20px 0;
   background-color: white;
-  color:black;
+  color: black;
   border: solid 1px rgb(220, 214, 214);
 }
 
-.menu{
-  background-color:#eceace;
+.menu {
+  background-color: #eceace;
   position: absolute;
   height: 140px;
   top: 100px;
@@ -330,12 +488,11 @@ th {
   flex-direction: column;
   border-radius: 11px;
 }
-.menu i{
+.menu i {
   margin-right: 10px;
 }
-.menu button{
+.menu button {
   text-align: left;
-
 }
 .userLogo {
   text-align: center;
@@ -375,18 +532,6 @@ recipeForm > div > div:last-child {
   margin-right: 0;
 }
 
-/* input[type="text"] {
-  width: 300px;
-  padding: 8px;
-  font-size: 16px;
-}
-
-button[type="submit"] {
-  padding: 10px 20px;
-  font-size: 16px;
-  cursor: pointer;
-} */
-
 .recipeSelection {
   margin-top: 20px;
 }
@@ -417,7 +562,9 @@ button[type="submit"] {
   height: 100vh;
   padding: 0;
 }
-
+.loginHead2 {
+  display: none;
+}
 .calculateBtn {
   margin: 40px 0 60px 0;
   padding: 8px 40px;
@@ -604,7 +751,7 @@ html {
 
 .fruitImage:nth-child(14) {
   bottom: 45%;
-  right: 15%;
+  right: 7%;
   transform: translateY(-100vh); /* float in from right */
 }
 
@@ -628,9 +775,17 @@ html {
 .roundedTable {
   /* border-collapse: separate; */
   border-spacing: 0;
-  border-radius: 15px;
+  border-radius: 0 0 15px 15px;
   overflow: hidden;
-  margin-top: 50px;
+  margin-top: 0px;
+}
+.totalNutrientsValue h4 {
+  padding: 14px 0;
+  color: white;
+  font-weight: 500;
+  font-size: 19px;
+  background-color: rgb(72, 71, 71);
+  border-radius: 15px 15px 0 0;
 }
 .unitTableParent {
   margin: 0 10%;

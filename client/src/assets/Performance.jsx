@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import styles from "../styles/HomeStyles.module.css";
+import media from "../styles/mediaStyles.module.css";
 import axios from "axios";
 import {
   Chart as ChartJS,
@@ -35,14 +36,16 @@ const Performance = () => {
 
   useEffect(() => {
     const fetchPerformanceData = async () => {
-      const email = localStorage.getItem('userEmail');
+      const email = localStorage.getItem("userEmail");
       if (!email) {
-        console.error('User email not found');
+        console.error("User email not found");
         return;
       }
 
       try {
-        const response = await axios.get(`http://localhost:3001/performance?email=${email}`);
+        const response = await axios.get(
+          `http://localhost:3001/performance?email=${email}`
+        );
         setPerformanceData(response.data);
         setLoading(false); // Set loading to false after data is fetched
         console.log(response.data); // Log the entire response
@@ -89,8 +92,8 @@ const Performance = () => {
   };
 
   return (
-    <div className={styles.body2}>
-      <div>
+    <div className={`${styles.performanceParent} ${media.performanceParent}`}>
+      <div className={`${styles.chart} ${media.chart}`}>
         <Line data={LinearChartData} />
       </div>
     </div>
