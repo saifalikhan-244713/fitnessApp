@@ -1,28 +1,32 @@
 {
-    "routes": [
+    "rewrites": [
         {
-            "src": "/",
-            "dest": "/login."
+            "source": "/",
+            "destination": "/login"
         },
         {
-            "src": "/login",
-            "dest": "/login"
+            "source": "/login",
+            "destination": "/login"
         },
         {
-            "src": "/signup",
-            "dest": "/signup"
+            "source": "/signup",
+            "destination": "/signup"
         },
         {
-            "src": "/home",
-            "dest": "/home"
+            "source": "/home",
+            "destination": "/home"
         },
         {
-            "src": "/performance",
-            "dest": "/performance"
+            "source": "/performance",
+            "destination": "/performance"
         },
         {
-            "src": "/calculator",
-            "dest": "/calculator"
+            "source": "/calculator",
+            "destination": "/calculator"
+        },
+        {
+            "source": "/(.*)",
+            "destination": "/"
         }
     ]
 }
