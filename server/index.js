@@ -45,7 +45,7 @@ app.use(cors());
 app.use("/api/auth", authRoutes); // Use authRoutes for authentication-related routes
 
 mongoose
-  .connect("mongodb://localhost:27017/myjwt2")
+  .connect("mongodb+srv://saifkhanali101:UK18b7343@@@@cluster0.8vgbuey.mongodb.net/myDB?retryWrites=true&w=majority&appName=Cluster0")
   .then(() => console.log("MongoDB connected"))
   .catch((err) => console.error("MongoDB connection error:", err));
 
