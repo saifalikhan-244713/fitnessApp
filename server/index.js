@@ -8,25 +8,25 @@ const authRoutes = require("./routes/authRoutes");
 
 const app = express();
 
-const prodOrigins = [process.env.ORIGIN_1, process.env.ORIGIN_2];
-const devOrigin = ["http://localhost:5173"];
-const allowedOrigins = (process.env.NODE_ENV = "production"
-  ? prodOrigins
-  : devOrigin);
-app.use(
-  cors({
-    origin: (origin, callback) => {
-      if (allowedOrigins.includes(origin)) {
-        console.log(origin, allowedOrigins);
-        callback(null, true);
-      } else {
-        callback(new Error("Not allowed by CORS"));
-      }
-    },
-    credentials: true,
-    methods: ["GET", "POST", "PUT", "DELETE"],
-  })
-);
+// const prodOrigins = [process.env.ORIGIN_1, process.env.ORIGIN_2];
+// const devOrigin = ["http://localhost:5173"];
+// const allowedOrigins = (process.env.NODE_ENV = "production"
+//   ? prodOrigins
+//   : devOrigin);
+// app.use(
+//   cors({
+//     origin: (origin, callback) => {
+//       if (allowedOrigins.includes(origin)) {
+//         console.log(origin, allowedOrigins);
+//         callback(null, true);
+//       } else {
+//         callback(new Error("Not allowed by CORS"));
+//       }
+//     },
+//     credentials: true,
+//     methods: ["GET", "POST", "PUT", "DELETE"],
+//   })
+// );
 
 app.use(express.json());
 app.use(bodyParser.json());
@@ -45,7 +45,8 @@ app.use(cors());
 app.use("/api/auth", authRoutes); // Use authRoutes for authentication-related routes
 
 mongoose
-  .connect("mongodb+srv://saifkhanali101:UK18b7343@@@@cluster0.8vgbuey.mongodb.net/myDB?retryWrites=true&w=majority&appName=Cluster0")
+  // mongodb://localhost:27017/myjwt
+  .connect("mongodb+srv://saifkhanali101:saifkhanali@123@cluster0.uk6hp7a.mongodb.net/fitDB?retryWrites=true&w=majority&appName=Cluster0")
   .then(() => console.log("MongoDB connected"))
   .catch((err) => console.error("MongoDB connection error:", err));
 
