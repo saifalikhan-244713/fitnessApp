@@ -1,15 +1,41 @@
 {
-    "version": 2,
     "builds": [
         {
-            "src": "*.js",
+            "src": "client/package.json",
+            "use": "@vercel/static-build",
+            "config": {
+                "distDir": "client/dist"
+            }
+        },
+        {
+            "src": "server/index.js",
             "use": "@vercel/node"
         }
     ],
     "routes": [
         {
+            "src": "/api/(.*)",
+            "dest": "/server/index.js"
+        },
+        {
+            "src": "/login",
+            "dest": "/cl"
+        },
+        {
+            "src": "/signup",
+            "dest": "/client/dist/signup.html"
+        },
+        {
+            "src": "/calculator",
+            "dest": "/client/dist/calculator.html"
+        },
+        {
+            "src": "/home",
+            "dest": "/client/dist/index.html"
+        },
+        {
             "src": "/(.*)",
-            "dest": "/"
+            "dest": "/client/dist/$1"
         }
     ]
 }

@@ -44,11 +44,12 @@ app.use((req, res, next) => {
 app.use(cors());
 app.use("/api/auth", authRoutes); // Use authRoutes for authentication-related routes
 
+
 mongoose
-  // mongodb://localhost:27017/myjwt
-  .connect("mongodb+srv://saifkhanali101:saifkhanali@123@cluster0.uk6hp7a.mongodb.net/fitDB?retryWrites=true&w=majority&appName=Cluster0")
+  .connect("")
   .then(() => console.log("MongoDB connected"))
   .catch((err) => console.error("MongoDB connection error:", err));
+
 
 app.post("/api/logs", async (req, res) => {
   const { email, value } = req.body;
